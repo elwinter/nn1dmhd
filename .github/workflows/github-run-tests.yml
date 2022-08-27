@@ -1,7 +1,7 @@
 name: Run regression tests
 on: [push]
 jobs:
-  Run-Emmpy-Tests:
+  Run-nn1dmhd-Tests:
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
