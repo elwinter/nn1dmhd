@@ -12,7 +12,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["--activation", "sigmoid", "--debug", "--learning_rate", "0.01", "--max_epochs", "10", "--n_hid", "10", "--n_layers", "1", "--no-convcheck", "--no-save_model", "--no-save_weights", "--nx_train", "11", "--ny_train", "11", "--precision", "float32", "--problem", "problems.static", "--verbose", "--w_bc", "0.5", ]
+            "args": ["--activation", "sigmoid", "--debug", "--learning_rate", "0.01", "--max_epochs", "640000", "--n_hid", "10", "--n_layers", "1", "--no-convcheck", "--no-save_model", "--no-save_weights", "--nx_train", "11", "--ny_train", "11", "--precision", "float32", "--problem", "nn1dmhd.problems.eplasma1", "--verbose", "--w_bc", "0.95", ]
         }
     ]
 }

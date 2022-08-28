@@ -129,4 +129,5 @@ dmypy.json
 .pyre/
 
 # Run result directories
-problems.static/
+nn1dmhd.problems.eplasma1/
+nn1dmhd.problems.static/

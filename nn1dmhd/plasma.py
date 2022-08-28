@@ -36,7 +36,10 @@ def electron_plasma_angular_frequency(n:float, normalize:bool=False):
     wp : float
         Electron plasma angular frequency (units of rad/s).
     """
-    wp = np.sqrt(n*spc.e**2/(spc.epsilon_0*spc.me))
+    if normalize:
+        wp = np.sqrt(n)
+    else:
+        wp = np.sqrt(n*spc.e**2/(spc.epsilon_0*spc.m_e))
     return wp
 
 
@@ -59,7 +62,10 @@ def electron_thermal_speed(T:float, normalize:bool=False):
         Electron thermal speed (units of m/s).
 
     """
-    vth = np.sqrt(2*spc.k*T/spc.me)
+    if normalize:
+        vth = np.sqrt(2*T)
+    else:
+        vth = np.sqrt(2*spc.k*T/spc.m_e)
     return vth
 
 
@@ -84,8 +90,8 @@ def electron_plasma_wave_angular_frequency(n:float, T:float, k:float, normalize:
     w : float
         Electron plasma wave angular frequency (units of rad/s).
     """
-    wp = electron_plasma_angular_frequency(n)
-    vth = electron_thermal_speed(T)
+    wp = electron_plasma_angular_frequency(n, normalize=normalize)
+    vth = electron_thermal_speed(T, normalize=normalize)
     w = np.sqrt(wp**2 + 1.5*vth**2*k**2)
     return w
 
@@ -111,6 +117,6 @@ def electron_plasma_wave_phase_speed(n:float, T:float, k:float, normalize:bool=F
     vphase : float
         Phase speed (units of m/s).
     """
-    w = electron_plasma_wave_angular_frequency(n, T, k)
+    w = electron_plasma_wave_angular_frequency(n, T, k, normalize=normalize)
     vphase = w/k
     return vphase
