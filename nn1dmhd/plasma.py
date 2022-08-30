@@ -26,7 +26,7 @@ def electron_plasma_angular_frequency(n:float, normalize:bool=False):
 
     Parameters
     ----------
-    n : float
+    n : np.ndarray
         Electron number density (units of m**-3).
     normalize : bool (default False)
         Assume unit values for all physical constants.
@@ -51,7 +51,7 @@ def electron_thermal_speed(T:float, normalize:bool=False):
 
     Parameters
     ----------
-    T : float
+    T : np.ndarray
         Temperature (units of K).
     normalize : bool (default False)
         Assume unit values for all physical constants.
@@ -76,11 +76,11 @@ def electron_plasma_wave_angular_frequency(n:float, T:float, k:float, normalize:
 
     Parameters
     ----------
-    n : float
+    n : np.ndarray
         Electron number density (units of m**-3).
     T : float
         Temperature (units of K).
-    k : float
+    k : np.ndarray
         Wavenumber (units of rad/m).
     normalize : bool (default False)
         Assume unit values for all physical constants.
@@ -103,11 +103,11 @@ def electron_plasma_wave_phase_speed(n:float, T:float, k:float, normalize:bool=F
 
     Parameters
     ----------
-    n : float
+    n : np.ndarray
         Electron number density (units of m**-3).
     T : float
         Temperature (units of K).
-    k : float
+    k : np.ndarray
         Wavenumber (units of rad/m).
     normalize : bool (default False)
         Assume unit values for all physical constants.
