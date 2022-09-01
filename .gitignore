@@ -128,6 +128,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Mac stuff
+.DS_Store
+
 # Run result directories
 nn1dmhd.problems.eplasma1/
 nn1dmhd.problems.static/
