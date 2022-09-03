@@ -6,7 +6,7 @@ because in the ideal 1-D MHD case, the x-velocity perturbation v1x,
 and the x-component of the electric field (E1x) are both functions of
 the density perturbation n1.
 
-The functions in this module are defined using a combination of Numpy and
+NOTE: The functions in this module are defined using a combination of Numpy and
 TensorFlow operations, so they can be used efficiently by the TensorFlow
 code.
 
@@ -26,9 +26,13 @@ Eric Winter (eric.winter62@gmail.com)
 """
 
 
+# Import standard modules.
 import numpy as np
+
+# Import supplemental modules.
 import tensorflow as tf
 
+# Import project modules.
 import nn1dmhd.plasma as plasma
 
 
@@ -36,7 +40,7 @@ import nn1dmhd.plasma as plasma
 independent_variable_names = ["x", "t"]
 
 # Number of independent variables.
-n_dim = len(independent_variable_names)
+ndim = len(independent_variable_names)
 
 # Names of dependent variables.
 variable_names = ["n1"]
@@ -44,12 +48,6 @@ variable_names = ["n1"]
 # Number of dependent variables.
 n_var = len(variable_names)
 
-# Normalized physical constants.
-kb = 1.0     # Boltzmann constant
-me = 1.0     # Electron mass
-e = 1.0      # Electron charge
-eps0 = 1.0   # Permittivity of free space
-gamma = 3.0  # Adiabatic index.
 
 # Define the problem domain.
 x0 = 0.0
@@ -60,7 +58,7 @@ t1 = 1.0
 # Ambient temperature (normalized to unit physical constants).
 T = 1.0
 
-# Wavelength and wavenumber of initial density/velocity/Ex perturbations.
+# Wavelength and wavenumber of initial density/velocity/Ex perturbation.
 wavelength = 1.0
 kx = 2*np.pi/wavelength
 
@@ -68,21 +66,38 @@ kx = 2*np.pi/wavelength
 n0 = 1.0
 n10 = 0.1
 
-# Ambient pressure at start.
-P0 = n0*kb*T
 
-
-# Compute the electron plasma angular frequency.
+# Compute the electron plasma angular frequency (independent of components).
 wp = plasma.electron_plasma_angular_frequency(n0, normalize=True)
 
-# Compute the electron plasma wave angular frequency.                           
-w = plasma.electron_plasma_wave_angular_frequency(n0, T, kx, normalize=True)
-
-# Compute the electron thermal speed.
+# Compute the electron thermal speed (independent of components).
 vth = plasma.electron_thermal_speed(T, normalize=True)
 
-# Compute the wave phase speed.
+# Compute the electron plasma wave angular frequency for each component.                           
+w = plasma.electron_plasma_wave_angular_frequency(n0, T, kx, normalize=True)
+
+# Compute the wave phase speed for each component.
 vphase = plasma.electron_plasma_wave_phase_speed(n0, T, kx, normalize=True)
+
+
+def n1a(xt):
+    """Compute the analytical solution.
+
+    Compute the anaytical solution.
+
+    Parameters
+    ----------
+    xt : nd.array of float, shape (n, 2)
+        x- and t-values for computation.
+
+    Returns
+    -------
+    n1 : nd.array of float, shape (n,)
+    """
+    x = xt[:, 0]
+    t = xt[:, 1]
+    n1 = n10*np.sin(kx*x - w*t)
+    return n1
 
 
 def create_training_data(nx:int, nt:int):
@@ -91,6 +106,8 @@ def create_training_data(nx:int, nt:int):
     Create and return a set of training data of points evenly spaced in x and
     t. Flatten the data to a list of pairs of points. Also return copies
     of the data containing only internal points, and only boundary points.
+
+    The boundary conditions are defined at (x, t) = (x, 0) and (x, t) = (0, t).
 
     Parameters
     ----------
@@ -101,9 +118,9 @@ def create_training_data(nx:int, nt:int):
     -------
     xt : np.ndarray, shape (nx*nt, 2)
         Array of all [x, t] points.
-    xt_in : np.ndarray, shape ((nx - 1)*(nt - 2)), 2)
+    xt_in : np.ndarray, shape (nx*nt - n_bc, 2)
         Array of all [x, t] points within boundary.
-    xt_bc : np.ndarray, shape (nx + 2*(nt - 1), 2)
+    xt_bc : np.ndarray, shape (nx + nt - 1, 2)
         Array of all [x, t] points at boundary.
     """
     # Create the array of all training points (x, t), looping over t then x.
@@ -113,14 +130,15 @@ def create_training_data(nx:int, nt:int):
     T = np.tile(t, nx)
     xt = np.vstack([X, T]).T
 
-    # Now split the training data into two groups - inside the BC, and on the
-    # BC.
+    # Now split the training data into two groups - inside the boundary,
+    # and on the boundary.
+
     # Initialize the mask to keep everything.
     mask = np.ones(len(xt), dtype=bool)
+
     # Mask off the points at x = 0.
     mask[:nt] = False
-    # Mask off the points at x = 1.
-    mask[-nt:] = False
+
     # Mask off the points at t = 0.
     mask[::nt] = False
 
@@ -130,7 +148,14 @@ def create_training_data(nx:int, nt:int):
     # Invert the mask and extract the boundary points.
     mask = np.logical_not(mask)
     xt_bc = xt[mask]
+
+    # Return the lists of training points.
     return xt, xt_in, xt_bc
+
+
+# List the analytical solutions so they can also be used for computing the
+# boundary conditions.
+Ya = [n1a]
 
 
 def compute_boundary_conditions(xt:np.ndarray):
@@ -146,26 +171,9 @@ def compute_boundary_conditions(xt:np.ndarray):
     bc : np.ndarray of float, shape (n_bc, n_var)
         Values of each dependent variable on boundary.
     """
-    w = plasma.electron_plasma_wave_angular_frequency(n0, T, kx, normalize=True)
-    n = len(xt)
-    bc = np.empty((n, n_var))
-    for (i, (x, t)) in enumerate(xt):
-        if np.isclose(x, x0):
-            # Periodic perturbation at x = x0 = 0.
-            bc[i, :] = [
-                n10*np.sin(-w*t),
-            ]
-        elif np.isclose(x, x1):
-            # Periodic perturbation at x = x1, same as at x = x0.
-            bc[i, :] = [
-                n10*np.sin(-w*t),
-            ]
-        elif np.isclose(t, t0):
-            bc[i, :] = [
-                n10*np.sin(kx*x),
-            ]
-        else:
-            raise ValueError
+    bc = Ya[0](xt)
+    # Since only a single variable, added a dummy column dimension.
+    bc = bc[:, np.newaxis]
     return bc
 
 
