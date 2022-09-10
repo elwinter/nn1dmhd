@@ -9,7 +9,7 @@ NOTE: The functions in this module are defined using a combination of Numpy and
 TensorFlow operations, so they can be used efficiently by the TensorFlow
 code.
 
-NOTE: In all code, below, the following indices are assigned to physical
+NOTE: In all code below, the following indices are assigned to physical
 variables (all are perturbations to initial values):
 
 0: n1    # electron number density perturbation
@@ -23,7 +23,6 @@ Russel et al, applying the assumptions used for electron plasma waves
 Author
 ------
 Eric Winter (eric.winter62@gmail.com)
-
 """
 
 
@@ -91,7 +90,7 @@ vphase = plasma.electron_plasma_wave_phase_speed(n0, T, kx, normalize=True)
 v1x0 = 0.0
 v1x_amp = w/kx*n1_amp/n0
 E1x = 0.0
-E1x_amp = e*n1_amp/(kb*eps0)
+E1x_amp = e*n1_amp/(kx*eps0)
 
 
 def n1a(xt):
@@ -153,8 +152,8 @@ def E1xa(xt):
     """
     x = xt[:, 0]
     t = xt[:, 1]
-    v1x = E1x_amp*np.sin(kx*x - w*t + np.pi/2)
-    return v1x
+    E1x = E1x_amp*np.sin(kx*x - w*t + np.pi/2)
+    return E1x
 
 
 # List the analytical solutions so they can also be used for computing the
