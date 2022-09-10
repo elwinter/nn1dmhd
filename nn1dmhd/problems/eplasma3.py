@@ -10,7 +10,7 @@ TensorFlow operations, so they can be used efficiently by the TensorFlow
 code.
 
 NOTE: In all code below, the following indices are assigned to physical
-variables (all are perturbations to initial values):
+variables (all are perturbations to steady-state values):
 
 0: n1    # electron number density perturbation
 1: v1x   # x-component of velocity perturbation
@@ -33,7 +33,7 @@ import numpy as np
 import tensorflow as tf
 
 # Import project modules.
-import nn1dmhd.plasma as plasma
+from nn1dmhd import plasma
 
 
 # Names of independent variables.
@@ -58,7 +58,7 @@ t1 = 1.0
 # Ambient temperature (normalized to unit physical constants).
 T = 1.0
 
-# Wavelength and wavenumber of initial density/velocity/Ex perturbation.
+# Wavelength and wavenumber of initial n/vx/Ex perturbations.
 wavelength = 1.0
 kx = 2*np.pi/wavelength
 
@@ -74,7 +74,7 @@ me = 1.0    # Electron mass
 # Adiabatic index for 1-D gas.
 gamma = 3.0
 
-# Steady-state values and perturbation amplitudes at t = 0, for all x.
+# Steady-state value and perturbation amplitudes for number density.
 n0 = 1.0
 n1_amp = 0.1
 
@@ -87,9 +87,13 @@ w = plasma.electron_plasma_wave_angular_frequency(n0, T, kx, normalize=True)
 # Compute the wave phase speed for each component.
 vphase = plasma.electron_plasma_wave_phase_speed(n0, T, kx, normalize=True)
 
+
+# Steady-state value and perturbation amplitudes for x-velocity.
 v1x0 = 0.0
 v1x_amp = w/kx*n1_amp/n0
-E1x = 0.0
+
+# Steady-state value and perturbation amplitudes for x-electric field.
+E1x0 = 0.0
 E1x_amp = e*n1_amp/(kx*eps0)
 
 
@@ -298,7 +302,7 @@ def pde_v1x(xt, Y1, del_Y1):
     # Each of these Tensors is shape (n, 1).
     # x = tf.reshape(xt[:, 0], (n, 1))
     # t = tf.reshape(xt[:, 1], (n, 1))
-    # (n1, v1x, E1x) = Y1
+    (n1, v1x, E1x) = Y1
     (del_n1, del_v1x, del_E1x) = del_Y1
     dn1_dx = tf.reshape(del_n1[:, 0], (n, 1))
     # dn1_dt = tf.reshape(del_n1[:, 1], (n, 1))
