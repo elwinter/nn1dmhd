@@ -335,7 +335,7 @@ def main():
         if save_weights:
             for (i, model) in enumerate(models):
                 model.save_weights(
-                    os.path.join(output_dir, "weights_" + p.variable_names[i],
+                    os.path.join(output_dir, "weights_" + p.dependent_variable_names[i],
                                  "weights_%06d" % epoch)
                 )
 
@@ -404,9 +404,9 @@ def main():
     delN_train = [tape1.gradient(N, xy) for N in N_train]
     for i in range(p.n_var):
         np.savetxt(os.path.join(output_dir, "%s_train.dat" %
-                   p.variable_names[i]), tf.reshape(N_train[i], (n_train,)))
+                   p.dependent_variable_names[i]), tf.reshape(N_train[i], (n_train,)))
         np.savetxt(os.path.join(output_dir, "del_%s_train.dat" %
-                   p.variable_names[i]), delN_train[i])
+                   p.dependent_variable_names[i]), delN_train[i])
 
     # Compute and save the trained results at validation points.
     # if verbose:
@@ -428,14 +428,14 @@ def main():
     # delN_val = [tape1.gradient(N, xy_val) for N in N_val]
     # for i in range(p.n_var):
     #     np.savetxt(os.path.join(output_dir, "%s_val.dat" %
-    #                p.variable_names[i]), tf.reshape(N_val[i], (n_val,)))
+    #                p.dependent_variable_names[i]), tf.reshape(N_val[i], (n_val,)))
     #     np.savetxt(os.path.join(output_dir, "del_%s_val.dat" %
-    #                p.variable_names[i]), delN_val[i])
+    #                p.dependent_variable_names[i]), delN_val[i])
 
     # Save the trained models.
     if save_model:
         for (i, model) in enumerate(models):
-            model.save(os.path.join(output_dir, "model_" + p.variable_names[i]))
+            model.save(os.path.join(output_dir, "model_" + p.dependent_variable_names[i]))
 
 if __name__ == "__main__":
     """Begin main program."""

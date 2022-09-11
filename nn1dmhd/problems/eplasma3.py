@@ -13,7 +13,7 @@ NOTE: In all code below, the following indices are assigned to physical
 variables (all are perturbations to steady-state values):
 
 0: n1    # electron number density perturbation
-1: v1x   # x-component of velocity perturbation
+1: u1x   # x-component of electron velocity perturbation
 2: E1x   # x-component of electric field perturbation
 
 These equations are derived from the ideal MHD equations developed in
@@ -43,10 +43,10 @@ independent_variable_names = ["x", "t"]
 ndim = len(independent_variable_names)
 
 # Names of dependent variables.
-variable_names = ["n1", "v1x", "E1x"]
+dependent_variable_names = ["n1", "v1x", "E1x"]
 
 # Number of dependent variables.
-n_var = len(variable_names)
+n_var = len(dependent_variable_names)
 
 
 # Define the problem domain.
@@ -54,6 +54,15 @@ x0 = 0.0
 x1 = 1.0
 t0 = 0.0
 t1 = 1.0
+
+# Normalized physical constants.
+e = 1.0     # Unit charge
+kb = 1.0    # Boltzmann constant
+eps0 = 1.0  # Permeability of free space
+me = 1.0    # Electron mass
+
+# Adiabatic index for 1-D gas.
+gamma = 3.0
 
 # Ambient temperature (normalized to unit physical constants).
 T = 1.0
@@ -64,15 +73,6 @@ kx = 2*np.pi/wavelength
 
 # Compute the electron thermal speed (independent of components).
 vth = plasma.electron_thermal_speed(T, normalize=True)
-
-# Normalized physical constants.
-e = 1.0     # Unit charge
-kb = 1.0    # Boltzmann constant
-eps0 = 1.0  # Permeability of free space
-me = 1.0    # Electron mass
-
-# Adiabatic index for 1-D gas.
-gamma = 3.0
 
 # Steady-state value and perturbation amplitudes for number density.
 n0 = 1.0
@@ -86,7 +86,6 @@ w = plasma.electron_plasma_wave_angular_frequency(n0, T, kx, normalize=True)
 
 # Compute the wave phase speed for each component.
 vphase = plasma.electron_plasma_wave_phase_speed(n0, T, kx, normalize=True)
-
 
 # Steady-state value and perturbation amplitudes for x-velocity.
 v1x0 = 0.0
