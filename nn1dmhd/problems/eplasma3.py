@@ -56,20 +56,20 @@ t0 = 0.0
 t1 = 1.0
 
 # Normalized physical constants.
-e = 1.0     # Unit charge
-kb = 1.0    # Boltzmann constant
-eps0 = 1.0  # Permeability of free space
-me = 1.0    # Electron mass
+𝑒 = 1.0     # Unit charge
+𝑘 = 1.0    # Boltzmann constant
+ε0 = 1.0  # Permeability of free space
+𝑚 = 1.0    # Electron mass
 
 # Adiabatic index for 1-D gas.
-gamma = 3.0
+ɣ = 3.0
 
 # Ambient temperature (normalized to unit physical constants).
 T = 1.0
 
 # Wavelength and wavenumber of initial n/vx/Ex perturbations.
-wavelength = 1.0
-kx = 2*np.pi/wavelength
+λ = 1.0
+kx = 2*np.pi/λ
 
 # Compute the electron thermal speed (independent of components).
 vth = plasma.electron_thermal_speed(T, normalize=True)
@@ -79,21 +79,21 @@ n0 = 1.0
 n1_amp = 0.1
 
 # Compute the electron plasma angular frequency (independent of components).
-wp = plasma.electron_plasma_angular_frequency(n0, normalize=True)
+ωp = plasma.electron_plasma_angular_frequency(n0, normalize=True)
 
 # Compute the electron plasma wave angular frequency for each component.                           
-w = plasma.electron_plasma_wave_angular_frequency(n0, T, kx, normalize=True)
+ω = plasma.electron_plasma_wave_angular_frequency(n0, T, kx, normalize=True)
 
 # Compute the wave phase speed for each component.
-vphase = plasma.electron_plasma_wave_phase_speed(n0, T, kx, normalize=True)
+vφ = plasma.electron_plasma_wave_phase_speed(n0, T, kx, normalize=True)
 
 # Steady-state value and perturbation amplitudes for x-velocity.
 v1x0 = 0.0
-v1x_amp = w/kx*n1_amp/n0
+v1x_amp = ω/kx*n1_amp/n0
 
 # Steady-state value and perturbation amplitudes for x-electric field.
 E1x0 = 0.0
-E1x_amp = e*n1_amp/(kx*eps0)
+E1x_amp = 𝑒*n1_amp/(kx*ε0)
 
 
 def n1a(xt):
@@ -113,7 +113,7 @@ def n1a(xt):
     """
     x = xt[:, 0]
     t = xt[:, 1]
-    n1 = n1_amp*np.sin(kx*x - w*t)
+    n1 = n1_amp*np.sin(kx*x - ω*t)
     return n1
 
 
@@ -134,7 +134,7 @@ def v1xa(xt):
     """
     x = xt[:, 0]
     t = xt[:, 1]
-    v1x = v1x_amp*np.sin(kx*x - w*t)
+    v1x = v1x_amp*np.sin(kx*x - ω*t)
     return v1x
 
 
@@ -155,7 +155,7 @@ def E1xa(xt):
     """
     x = xt[:, 0]
     t = xt[:, 1]
-    E1x = E1x_amp*np.sin(kx*x - w*t + np.pi/2)
+    E1x = E1x_amp*np.sin(kx*x - ω*t + np.pi/2)
     return E1x
 
 
@@ -311,7 +311,7 @@ def pde_v1x(xt, Y1, del_Y1):
     # dE1x_dt = tf.reshape(del_E1x[:, 1], (n, 1))
 
     # G is a Tensor of shape (n, 1).
-    G = dv1x_dt + e/me*E1x + gamma*kb*T/(me*n0)*dn1_dx
+    G = dv1x_dt + 𝑒/𝑚*E1x + ɣ*𝑘*T/(𝑚*n0)*dn1_dx
     return G
 
 
@@ -349,7 +349,7 @@ def pde_E1x(xt, Y1, del_Y1):
     # dE1x_dt = tf.reshape(del_E1x[:, 1], (n, 1))
 
     # G is a Tensor of shape (n, 1).
-    G = dE1x_dx + e/eps0*n1
+    G = dE1x_dx + 𝑒/ε0*n1
     return G
 
 
