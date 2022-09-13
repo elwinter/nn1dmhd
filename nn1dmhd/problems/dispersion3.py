@@ -70,7 +70,7 @@ gamma = 3.0
 T = 1.0
 
 # Wavelength and wavenumber of initial n/vx/Ex perturbations.
-wavelengths = np.array([1.0])
+wavelengths = np.array([0.5, 1.0, 2.0])
 kx = 2*np.pi/wavelengths
 nc = len(kx)  # Number of wave components.
 
@@ -79,7 +79,7 @@ vth = plasma.electron_thermal_speed(T, normalize=True)
 
 # Steady-state value and perturbation amplitudes for number density.
 n0 = 1.0
-n1_amp = np.array([0.1])
+n1_amp = np.array([0.1, 0.1, 0.1])
 
 # Compute the electron plasma angular frequency (independent of components).
 wp = plasma.electron_plasma_angular_frequency(n0, normalize=True)
