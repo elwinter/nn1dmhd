@@ -15,8 +15,9 @@ Eric Winter (eric.winter62@gmail.com)
 
 # Import standard Python modules.
 import datetime
-from importlib import import_module
+import importlib.util
 import os
+import sys
 
 # Import 3rd-party modules.
 import numpy as np
@@ -37,8 +38,8 @@ default_ny_train = 11
 # Default number of validation points in the y-dimension.
 default_ny_val = 101
 
-# Default problem name.
-default_problem = "static"
+# Default the default problem file.
+default_problem = "/Users/winteel1/research_local/src/nn1dmhd/nn1dmhd/problems/eplasma1.py"
 
 
 def create_command_line_argument_parser():
@@ -131,12 +132,16 @@ def main():
     # Import the problem to solve.
     if verbose:
         print("Importing definition for problem '%s'." % problem)
-    p = import_module(problem)
+    problem_name = os.path.split(problem)[-1].strip(".py")
+    spec = importlib.util.spec_from_file_location(problem_name, problem)
+    p = importlib.util.module_from_spec(spec)
+    sys.modules[problem_name] = p
+    spec.loader.exec_module(p)
     if debug:
         print("p = %s" % p)
 
     # Set up the output directory under the current directory.
-    output_dir = os.path.join(".", problem)
+    output_dir = os.path.join(".", problem_name)
     common.create_output_directory(output_dir)
 
     # Record system information, network parameters, and problem definition.
