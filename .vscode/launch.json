@@ -12,7 +12,23 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["--activation", "sigmoid", "--debug", "--learning_rate", "0.01", "--max_epochs", "10000", "--n_hid", "10", "--n_layers", "1", "--no-convcheck", "--no-save_model", "--no-save_weights", "--nx_train", "11", "--ny_train", "11", "--precision", "float32", "--problem", "nn1dmhd.problems.dispersion2", "--verbose", "--w_bc", "0.95", ]
+            "args": [
+                "--debug",
+                "--no-convcheck",
+                "--save_model",
+                "--no-save_weights",
+                "--verbose",
+                "--activation", "sigmoid",
+                "--precision", "float32",
+                "--learning_rate", "0.01",
+                "--max_epochs", "1000",
+                "--n_hid", "100",
+                "--n_layers", "1",
+                "--nx_train", "11",
+                "--ny_train", "11",
+                "--w_bc", "0.95",
+                "--problem", "/Users/winteel1/research_local/src/nn1dmhd/nn1dmhd/problems/dispersion3.py",
+            ]
         }
     ]
 }
