@@ -297,7 +297,7 @@ def compute_boundary_conditions(xt):
 
 #     U = (rho, P, vx, vy, vz, By, Bz)
 
-#           / rho*vx                       \
+#           / rho                          \
 #          |  rho*vx**2 + Ptot - Bx**2      |
 #      F = |  rho*vx*vy - Bx*By             |
 #          |  rho*vx*vz - Bx*Bz             |
