@@ -157,7 +157,7 @@ def main():
         print("Creating and saving training data.")
     # These are each 2-D NumPy arrays.
     # Shapes are (n_train, 2), (n_train_in, 2), (n_train_bc, 2)
-    xy_train, xy_train_in, xy_train_bc = p.create_training_data(
+    xy_train, xy_train_in, xy_train_bc = p.create_training_data_gridded(
         nx_train, ny_train
     )
     # Shape is (n_train, p.n_dim)
