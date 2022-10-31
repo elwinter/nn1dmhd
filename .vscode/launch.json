@@ -22,14 +22,13 @@
                 "--precision", "float32",
                 "--learning_rate", "0.01",
                 "--max_epochs", "100",
-                "--n_hid", "100",
+                "--n_hid", "10",
                 "--n_layers", "1",
                 "--nx_train", "11",
                 "--ny_train", "11",
-                "--nz_train", "11",
                 "--nt_train", "11",
                 "--w_bc", "0.95",
-                "--problem", "/Users/winteel1/research_local/src/nn1dmhd/nn1dmhd/problems/static3.py",
+                "--problem", "/Users/winteel1/research_local/src/nn1dmhd/nn1dmhd/problems/loop2d.py",
             ]
         }
     ]
