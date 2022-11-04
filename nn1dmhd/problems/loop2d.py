@@ -73,7 +73,7 @@ x1 =  1.0
 y0 = -1/(2*np.cos(np.pi/2 - ϴ0))
 y1 =  1/(2*np.cos(np.pi/2 - ϴ0))
 t0 = 0.0
-t1 = 1.0
+t1 = 0.1
 domain = [
     [x0, x1],
     [y0, y1],
@@ -221,10 +221,11 @@ def Bx_analytical(xyt:np.ndarray):
     xc = ux0*t
     yc = uy0*t
     r = np.sqrt((x - xc)**2 + (y - yc)**2)
-    Bx = A*y/r
     # No field at center, or outside of cylinder.
-    Bx[np.isclose(r, 0)] = 0
-    Bx[np.greater_equal(r, R0)] = 0
+    Bx = np.zeros(len(xyt))
+    for i in range(len(r)):
+        if r[i] > 0 and r[i] <= R0:
+            Bx[i] = -A*y[i]/r[i]
     return Bx
 
 
@@ -250,9 +251,11 @@ def By_analytical(xyt:np.ndarray):
     xc = ux0*t
     yc = uy0*t
     r = np.sqrt((x - xc)**2 + (y - yc)**2)
-    By = -A*x/r
-    By[np.greater_equal(r, 0)] = 0
     # No field at center, or outside of cylinder.
+    By = np.zeros(len(xyt))
+    for i in range(len(r)):
+        if r[i] > 0 and r[i] <= R0:
+            By[i] = A*x[i]/r[i]
     return By
 
 
