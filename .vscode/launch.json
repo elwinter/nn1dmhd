@@ -25,10 +25,9 @@
                 "--n_hid", "10",
                 "--n_layers", "1",
                 "--nx_train", "10",
-                "--ny_train", "10",
                 "--nt_train", "10",
                 "--w_bc", "0.95",
-                "--problem", "/Users/winteel1/research_local/src/nn1dmhd/nn1dmhd/problems/loop2d.py",
+                "--problem", "/Users/winteel1/research_local/src/nn1dmhd/nn1dmhd/problems/static1.py",
             ]
         }
     ]
