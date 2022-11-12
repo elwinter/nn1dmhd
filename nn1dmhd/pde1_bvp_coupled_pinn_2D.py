@@ -47,7 +47,9 @@ default_nt_train = 11
 default_nt_val = 101
 
 # Default the default problem file.
-default_problem = "/Users/winteel1/research_local/src/nn1dmhd/nn1dmhd/problems/static2.py"
+default_problem = (
+    "/Users/winteel1/research_local/src/nn1dmhd/nn1dmhd/problems/static2.py"
+)
 
 
 def create_command_line_argument_parser():
@@ -72,19 +74,23 @@ def create_command_line_argument_parser():
     # Add program-specific command-line arguments.
     parser.add_argument(
         "--nt_train", type=int, default=default_nt_train,
-        help="Number of equally-spaced training points in t dimension (default: %(default)s)"
+        help="Number of equally-spaced training points in t dimension " +
+        "(default: %(default)s)"
     )
     parser.add_argument(
         "--nt_val", type=int, default=default_nt_val,
-        help="Number of equally-spaced validation points in t dimension (default: %(default)s)"
+        help="Number of equally-spaced validation points in t dimension " +
+        "(default: %(default)s)"
     )
     parser.add_argument(
         "--ny_train", type=int, default=default_ny_train,
-        help="Number of equally-spaced training points in y dimension (default: %(default)s)"
+        help="Number of equally-spaced training points in y dimension " +
+        "(default: %(default)s)"
     )
     parser.add_argument(
         "--ny_val", type=int, default=default_ny_val,
-        help="Number of equally-spaced validation points in y dimension (default: %(default)s)"
+        help="Number of equally-spaced validation points in y dimension " +
+        "(default: %(default)s)"
     )
     return parser
 
@@ -130,11 +136,11 @@ def main():
     H = args.n_hid
     n_layers = args.n_layers
     nx_train = args.nx_train
-    nx_val = args.nx_val
+    # nx_val = args.nx_val
     ny_train = args.ny_train
-    ny_val = args.ny_val
+    # ny_val = args.ny_val
     nt_train = args.nt_train
-    nt_val = args.nt_val
+    # nt_val = args.nt_val
     precision = args.precision
     problem = args.problem
     save_model = args.save_model
@@ -251,8 +257,8 @@ def main():
     xyt_train_var = tf.Variable(xyt_train, dtype=precision)
     xyt = xyt_train_var
     # Shape (n_train_in, 3)
-    xyt_train_in_var = tf.Variable(xyt_train_in, dtype=precision)
-    xyt_in = xyt_train_in_var
+    # xyt_train_in_var = tf.Variable(xyt_train_in, dtype=precision)
+    # xyt_in = xyt_train_in_var
     # Shape (n_train_bc, 3)
     xyt_train_bc_var = tf.Variable(xyt_train_bc, dtype=precision)
     xyt_bc = xyt_train_bc_var
@@ -321,13 +327,18 @@ def main():
             # Lm_bc is a list of Tensor objects.
             # There are p.n_var Tensors in the list.
             # Each Tensor has shape ().
-            Lm_bc = [tf.math.sqrt(tf.reduce_sum(E**2)/n_train_bc) for E in E_bc]
+            Lm_bc = [
+                tf.math.sqrt(tf.reduce_sum(E**2)/n_train_bc) for E in E_bc
+            ]
 
             # Compute the total losses for each model.
             # Lm is a list of Tensor objects.
             # There are p.n_var Tensors in the list.
             # Each Tensor has shape ().
-            Lm = [w_all*loss_all + w_bc*loss_bc for (loss_all, loss_bc) in zip(Lm_all, Lm_bc)]
+            Lm = [
+                w_all*loss_all + w_bc*loss_bc
+                for (loss_all, loss_bc) in zip(Lm_all, Lm_bc)
+            ]
 
             # Compute the total loss for all points for the model
             # collection.
@@ -360,7 +371,8 @@ def main():
         if save_weights:
             for (i, model) in enumerate(models):
                 model.save_weights(
-                    os.path.join(output_dir, "weights_" + p.dependent_variable_names[i],
+                    os.path.join(output_dir, "weights_" +
+                                 p.dependent_variable_names[i],
                                  "weights_%06d" % epoch)
                 )
 
@@ -380,7 +392,10 @@ def main():
         # Input biases: (H,)
         # Output weights: (H, 1)
         # Each Tensor is shaped based on model.trainable_variables.
-        pgrad = [tape0.gradient(L, model.trainable_variables) for model in models]
+        pgrad = [
+            tape0.gradient(L, model.trainable_variables)
+            for model in models
+        ]
 
         # Update the parameters for this epoch.
         for (g, m) in zip(pgrad, models):
@@ -397,7 +412,8 @@ def main():
     t_elapsed = t_stop - t_start
     if verbose:
         print("Training stopped at", t_stop)
-        print("Total training time was %s seconds." % t_elapsed.total_seconds())
+        print("Total training time was %s seconds." %
+              t_elapsed.total_seconds())
         print("Epochs: %d" % n_epochs)
         print("Final value of loss function: %f" % losses[-1])
         print("converged = %s" % converged)
@@ -413,8 +429,10 @@ def main():
     # Save the loss function histories.
     if verbose:
         print("Saving loss function histories.")
-    np.savetxt(os.path.join(output_dir, 'losses_model_all.dat'), losses_model_all)
-    np.savetxt(os.path.join(output_dir, 'losses_model_bc.dat'), losses_model_bc)
+    np.savetxt(os.path.join(output_dir, 'losses_model_all.dat'),
+               losses_model_all)
+    np.savetxt(os.path.join(output_dir, 'losses_model_bc.dat'),
+               losses_model_bc)
     np.savetxt(os.path.join(output_dir, 'losses_model.dat'), losses_model)
     np.savetxt(os.path.join(output_dir, 'losses_all.dat'), losses_all)
     np.savetxt(os.path.join(output_dir, 'losses_bc.dat'), losses_bc)
@@ -429,7 +447,8 @@ def main():
     delN_train = [tape1.gradient(N, xyt) for N in N_train]
     for i in range(p.n_var):
         np.savetxt(os.path.join(output_dir, "%s_train.dat" %
-                   p.dependent_variable_names[i]), tf.reshape(N_train[i], (n_train,)))
+                   p.dependent_variable_names[i]),
+                   tf.reshape(N_train[i], (n_train,)))
         np.savetxt(os.path.join(output_dir, "del_%s_train.dat" %
                    p.dependent_variable_names[i]), delN_train[i])
 
@@ -453,14 +472,16 @@ def main():
     # delN_val = [tape1.gradient(N, xt_val) for N in N_val]
     # for i in range(p.n_var):
     #     np.savetxt(os.path.join(output_dir, "%s_val.dat" %
-    #                p.dependent_variable_names[i]), tf.reshape(N_val[i], (n_val,)))
+    #                p.dependent_variable_names[i]),
+    #                tf.reshape(N_val[i], (n_val,)))
     #     np.savetxt(os.path.join(output_dir, "del_%s_val.dat" %
     #                p.dependent_variable_names[i]), delN_val[i])
 
     # Save the trained models.
     if save_model:
         for (i, model) in enumerate(models):
-            model.save(os.path.join(output_dir, "model_" + p.dependent_variable_names[i]))
+            model.save(os.path.join(output_dir, "model_" +
+                       p.dependent_variable_names[i]))
 
 
 if __name__ == "__main__":
