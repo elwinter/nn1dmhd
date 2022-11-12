@@ -57,7 +57,9 @@ dependent_variable_names = ['ρ', 'P', 'ux', 'uy', 'uz', 'Bx', 'By', 'Bz']
 
 # Labels for dependent variables (may use LaTex) - use for plots.
 dependent_variable_labels = [
-    r'$\rho$', r'$P$', r'$u_x$', r'$u_y$', r'$u_z$', r'$B_x$', r'$B_y$', r'$B_z$'
+    r'$\rho$', r'$P$',
+    r'$u_x$', r'$u_y$', r'$u_z$',
+    r'$B_x$', r'$B_y$', r'$B_z$'
 ]
 
 # Number of dependent variables.
@@ -271,7 +273,7 @@ def create_training_data_gridded(nx: int, ny: int, nz: int, nt: int):
     containing only internal points, and only boundary points.
 
     Boundary points occur where:
-    
+
     x = x0|x1, y = y0|y1, z = z0|z1, t = t0|t1
 
     Parameters
