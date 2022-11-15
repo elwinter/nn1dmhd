@@ -130,8 +130,7 @@ By1_amp = 0.0
 Bz1_amp = 0.0
 
 # Wavelength and wavenumber of initial perturbations.
-λ = np.array([1.0])
-nc = len(λ)  # Number of wave components.
+λ = 1.0
 kx = 2*np.pi/λ
 
 # Compute the electron plasma wave angular frequency for each component.                           
