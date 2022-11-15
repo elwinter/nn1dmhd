@@ -258,7 +258,7 @@ def Bz_analytical(X: np.ndarray):
 ]
 
 
-def create_training_data_gridded(nx: int, nt: int):
+def create_training_data_gridded(nt: int, nx: int):
     """Create the training data on an evenly-spaced grid.
 
     Create and return a set of training points evenly spaced in x, and
@@ -267,20 +267,20 @@ def create_training_data_gridded(nx: int, nt: int):
 
     Boundary points occur where:
 
-    x = x0|x1, t = t0|t1
+    t = t0|t1 OR x = x0|x1
 
     Parameters
     ----------
-    nx, nt : int
-        Number of points in x-, and t-dimensions.
+    nt, nx : int
+        Number of points in t-, and x-dimensions.
 
     Returns
     -------
-    X : np.ndarray, shape (nx*nt, n_dim)
+    Xg : np.ndarray, shape (nt*nx, n_dim)
         Array of all training points.
-    X_in : np.ndarray, shape (n_in, n_dim)
+    Xg_in : np.ndarray, shape (n_in, n_dim)
         Array of all training points within the boundary.
-    X_bc : np.ndarray, shape (n_bc, n_dim)
+    Xg_bc : np.ndarray, shape (n_bc, n_dim)
         Array of all training points on the boundary.
     """
     # Create the training grid and mask.
@@ -745,8 +745,8 @@ if __name__ == "__main__":
     print("dependent_variable_labels = %s" % dependent_variable_labels)
     print("n_var = %s" % n_var)
 
-    print("%s <= x <= %s" % (x0, x1))
     print("%s <= t <= %s" % (t0, t1))
+    print("%s <= x <= %s" % (x0, x1))
 
     print("ρ0 = %s" % ρ0)
     print("P0 = %s" % P0)
@@ -757,12 +757,12 @@ if __name__ == "__main__":
     print("By0 = %s" % By0)
     print("Bz0 = %s" % Bz0)
 
-    nx = 3
-    nt = 4
-    Xg, Xg_in, Xg_bc = create_training_data_gridded(nx, nt)
+    nt = 3
+    nx = 4
+    Xg, Xg_in, Xg_bc = create_training_data_gridded(nt, nx)
     print("Xg = %s" % Xg)
     print("Xg_in = %s" % Xg_in)
     print("Xg_bc = %s" % Xg_bc)
 
-    # bc = compute_boundary_conditions(X_bc)
-    # print("bc = %s" % bc)
+    bc = compute_boundary_conditions(Xg_bc)
+    print("bc = %s" % bc)
