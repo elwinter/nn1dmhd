@@ -3,7 +3,7 @@
 import os
 import time
 
-problem = "/homes/winteel1/research/src/nn1dmhd/nn1dmhd/problems/static3.py"
+problem = "/homes/winteel1/research/src/nn1dmhd/problems/static3.py"
 n_layerss = [1, 2, 3, 4]
 Hs = [10, 20, 40, 80]
 learning_rates = [0.01]

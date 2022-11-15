@@ -50,7 +50,7 @@ default_nt_val = 101
 
 # Default the default problem file.
 default_problem = (
-    "/Users/winteel1/research_local/src/nn1dmhd/nn1dmhd/problems/static3.py"
+    "/Users/winteel1/research_local/src/nn1dmhd/problems/static3.py"
 )
 
 
