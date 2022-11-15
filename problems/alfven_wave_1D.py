@@ -47,6 +47,7 @@ from nn1dmhd.training_data import create_training_points_gridded
 𝑘b = 1.0    # Boltzmann constant
 ε0 = 1.0  # Permeability of free space
 𝑚e = 1.0    # Electron mass
+μ0 = 1.0  # Permeability of free space
 
 # Names of independent variables.
 independent_variable_names = ['t', 'x']
