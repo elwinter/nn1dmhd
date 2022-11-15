@@ -5,10 +5,6 @@
 This program will use a set of neural networks to solve a set of coupled
 1st-order PDEs as a BVP.
 
-This code uses the PINN method.
-
-This code assumes 3-D MHD in (x, y, z, t).
-
 Author
 ------
 Eric Winter (eric.winter62@gmail.com)

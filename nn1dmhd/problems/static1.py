@@ -76,7 +76,7 @@ domain = np.array(
 )
 
 # Adiabatic index = (N + 2)/N, N = # DOF = 1.
-gamma = 3/2
+ɣ = 3/2
 
 # Normalized physical constants.
 μ0 = 1.0  # Permeability of free space
@@ -290,7 +290,7 @@ def create_training_data_gridded(nt: int, nx: int):
     mask = np.ones(ng_total, dtype=bool)
 
     # Compute the coordinates of each training point, and in-domain mask value.
-    for (i, (x, t)) in enumerate(Xg):
+    for (i, (t, x)) in enumerate(Xg):
         if (np.isclose(t, t0) or np.isclose(t, t1) or
             np.isclose(x, x0) or np.isclose(x, x1)):
             # This is a boundary point - mask it out.
@@ -428,7 +428,7 @@ def pde_P(X, ψ, del_ψ):
     # dBz_dx = tf.reshape(del_Bz[:, 1], (n, 1))
 
     # G is a Tensor of shape (n, 1).
-    G = -gamma*P/ρ*(dρ_dt + ux*dρ_dx) + dP_dt + ux*dP_dx
+    G = -ɣ*P/ρ*(dρ_dt + ux*dρ_dx) + dP_dt + ux*dP_dx
     return G
 
 
@@ -747,6 +747,7 @@ if __name__ == "__main__":
 
     print("%s <= t <= %s" % (t0, t1))
     print("%s <= x <= %s" % (x0, x1))
+    print("domain = %s" % domain)
 
     print("ρ0 = %s" % ρ0)
     print("P0 = %s" % P0)
