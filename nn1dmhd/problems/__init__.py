@@ -2,6 +2,7 @@
 
 Modules
 -------
+alfven_wave_3.py
 static1.py
 static2.py
 static3.py

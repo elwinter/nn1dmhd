@@ -10,8 +10,8 @@ code.
 NOTE: In all code, below, the following indices are assigned to physical
 independent variables:
 
-    0: x
-    1: t
+    0: t
+    1: x
 
 NOTE: In all code, below, the following indices are assigned to physical
 dependent variables:
@@ -35,10 +35,11 @@ Eric Winter (eric.winter62@gmail.com)
 
 # Import supplemental modules.
 import numpy as np
-# import tensorflow as tf
+import tensorflow as tf
 
 # Import project modules.
 from nn1dmhd import plasma
+from nn1dmhd.training_data import create_training_points_gridded
 
 
 # Normalized physical constants.
@@ -47,14 +48,11 @@ from nn1dmhd import plasma
 ε0 = 1.0  # Permeability of free space
 𝑚e = 1.0    # Electron mass
 
-
-# Problem variables
-
 # Names of independent variables.
-independent_variable_names = ['x', 't']
+independent_variable_names = ['t', 'x']
 
 # Labels for independent variables (may use LaTex) - use for plots.
-independent_variable_labels = [r'$x$', r'$t$']
+independent_variable_labels = [r'$t$', r'$x$']
 
 # Number of problem dimensions (independent variables).
 n_dim = len(independent_variable_names)
@@ -74,13 +72,13 @@ n_var = len(dependent_variable_names)
 
 
 # Define the problem domain.
-x0 = 0.0
-x1 = 1.0
 t0 = 0.0
 t1 = 1.0
+x0 = 0.0
+x1 = 1.0
 domain = np.array(
-    [[x0, x1],
-     [t0, t1]]
+    [[t0, t1],
+     [x0, x1]]
 )
 
 
@@ -103,18 +101,8 @@ By0 = 0.0
 Bz0 = 0.0
 initial_values = [ρ0, P0, ux0, uy0, uz0, Bx0, By0, Bz0]
 
-# Perturbation amplitudes for each dependent variable (dimensionless).
-ρ1_amp = 0.0
-P1_amp = 0.0
-ux1_amp = 0.0
-uy1_amp = 0.0
-uz1_amp = 0.0
-Bx1_amp = 0.0
-By1_amp = 0.0
-Bz1_amp = 0.0
 
-
-# Plasma computes values
+# Plasma computed values
 
 # Compute the electron thermal speed (independent of components).
 vth = plasma.electron_thermal_speed(T, normalize=True)
@@ -127,6 +115,16 @@ C_Alfven = Bx0/np.sqrt(ρ0)
 
 
 # Perturbations
+
+# Perturbation amplitudes for each dependent variable (dimensionless).
+ρ1_amp = 0.0
+P1_amp = 0.0
+ux1_amp = 0.0
+uy1_amp = 0.0
+uz1_amp = 0.0
+Bx1_amp = 0.0
+By1_amp = 0.0
+Bz1_amp = 0.0
 
 # Wavelength and wavenumber of initial perturbations.
 λ = np.array([1.0])
@@ -309,56 +307,55 @@ def Bz_analytical(xt: np.ndarray):
 ]
 
 
-# def create_training_data_gridded(nx: int, nt: int):
-#     """Create the training data.
+def create_training_data_gridded(nt: int, nx: int):
+    """Create the training data on an evenly-spaced grid.
 
-#     Create and return a set of training data of points evenly spaced in x and
-#     t. Flatten the data to a list of pairs of points. Also return copies
-#     of the data containing only internal points, and only boundary points.
+    Create and return a set of training points evenly spaced in x, and
+    t. Flatten the data to a list of points. Also return copies of the data
+    containing only internal points, and only boundary points.
 
-#     Parameters
-#     ----------
-#     nx, nt : int
-#         Number of points in x- and t- dimensions.
+    Boundary points occur where:
 
-#     Returns
-#     -------
-#     xt : np.ndarray, shape (nx*nt, n_dim)
-#         Array of all training points.
-#     xt_in : np.ndarray, shape (n_in, n_dim)
-#         Array of all training points within the boundary.
-#     xt_bc : np.ndarray, shape (n_bc, n_dim)
-#         Array of all training points on the boundary.
-#     """
-#     # Create the arrays to hold the training data and the in-domain mask.
-#     xt = np.empty((nx, nt, n_dim))
-#     mask = np.ones((nx, nt), dtype=bool)
+    t = t0
 
-#     # Compute the individual grid locations along each axis.
-#     x = np.linspace(x0, x1, nx)
-#     t = np.linspace(t0, t1, nt)
+    Parameters
+    ----------
+    nt, nx : int
+        Number of points in t-, and x-dimensions.
 
-#     # Compute the coordinates of each training point, and in-domain mask value.
-#     for (i, xx) in enumerate(x):
-#         for (l, tt) in enumerate(t):
-#             xt[i, l, :] = (xx, tt)
-#             if np.isclose(tt, t0):
-#                 # This is a boundary point - mask it out.
-#                 mask[i, l] = False
+    Returns
+    -------
+    Xg : np.ndarray, shape (nt*nx, n_dim)
+        Array of all training points.
+    Xg_in : np.ndarray, shape (n_in, n_dim)
+        Array of all training points within the boundary.
+    Xg_bc : np.ndarray, shape (n_bc, n_dim)
+        Array of all training points on the boundary.
+    """
+    # Create the training grid and mask.
+    ng = [nt, nx]
+    ng_total = np.prod(ng)
+    Xg = create_training_points_gridded(ng, domain)
+    mask = np.ones(ng_total, dtype=bool)
 
-#     # Flatten the coordinate and mask lists.
-#     xt.shape = (nx*nt, n_dim)
-#     mask.shape = (nx*nt,)
+    # Compute the coordinates of each training point, and in-domain mask value.
+    for (i, (t, x)) in enumerate(Xg):
+        if np.isclose(t, t0):
+            # This is a boundary point - mask it out.
+            mask[i] = False
 
-#     # Extract the internal points.
-#     xt_in = xt[mask]
+    # Flatten the mask.
+    mask.shape = (ng_total,)
 
-#     # Invert the mask and extract the boundary points.
-#     mask = np.logical_not(mask)
-#     xt_bc = xt[mask]
+    # Extract the internal points.
+    Xg_in = Xg[mask]
 
-#     # Return the complete, inner, and boundary training points.
-#     return xt, xt_in, xt_bc
+    # Invert the mask and extract the boundary points.
+    mask = np.logical_not(mask)
+    Xg_bc = Xg[mask]
+
+    # Return the complete, inner, and boundary training points.
+    return Xg, Xg_in, Xg_bc
 
 
 # def compute_boundary_conditions(xt: np.ndarray):
@@ -734,8 +731,8 @@ if __name__ == "__main__":
     print("dependent_variable_labels = %s" % dependent_variable_labels)
     print("n_var = %s" % n_var)
 
-    print("%s <= x <= %s" % (x0, x1))
     print("%s <= t <= %s" % (t0, t1))
+    print("%s <= x <= %s" % (x0, x1))
     print("domain = %s" % domain)
 
     print("T = %s" % T)
@@ -750,6 +747,10 @@ if __name__ == "__main__":
     print("By0 = %s" % By0)
     print("Bz0 = %s" % Bz0)
 
+    print("vth = %s" % vth)
+    print("ωp = %s" % ωp)
+    print("C_Alfven = %s" % C_Alfven)
+
     print("ρ1_amp = %s" % ρ1_amp)
     print("P1_amp = %s" % P1_amp)
     print("ux1_amp = %s" % ux1_amp)
@@ -759,20 +760,16 @@ if __name__ == "__main__":
     print("By1_amp = %s" % By1_amp)
     print("Bz1_amp = %s" % Bz1_amp)
 
-    print("vth = %s" % vth)
-    print("ωp = %s" % ωp)
-    print("C_Alfven = %s" % C_Alfven)
-
     for i in range(nc):
         print("λ[%d] = %s, kx[%d] = %s, ω[%d] = %s, vphase[%d] = %s, f[%d] = %s" %
               (i, λ[i], i, kx[i], i, ω[i], i, vphase[i], i, f[i]))
 
-    # nx = 3
-    # nt = 4
-    # xt, xt_in, xt_bc = create_training_data_gridded(nx, nt)
-    # print("xt = %s" % xt)
-    # print("xt_in = %s" % xt_in)
-    # print("xt_bc = %s" % xt_bc)
+    nt = 3
+    nx = 4
+    Xg, Xg_in, Xg_bc = create_training_data_gridded(nt, nx)
+    print("Xg = %s" % Xg)
+    print("Xg_in = %s" % Xg_in)
+    print("Xg_bc = %s" % Xg_bc)
 
-    # bc = compute_boundary_conditions(xt_bc)
+    # bc = compute_boundary_conditions(Xg_bc)
     # print("bc = %s" % bc)
