@@ -3,6 +3,8 @@
 Modules
 -------
 static1.py
+static2.py
+static3.py
 
 Packages
 --------
