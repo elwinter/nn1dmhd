@@ -2,11 +2,10 @@
 
 Modules
 -------
-eplasma1.py
-static.py
+static1.py
 
 Packages
 --------
-problems
+_obsolete
 tests
 """

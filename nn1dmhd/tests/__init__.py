@@ -2,9 +2,7 @@
 
 Modules
 -------
-test_common.py
-test_nn1dmhd.py
-test_plasma.py
+_obsolete
 
 Packages
 --------
