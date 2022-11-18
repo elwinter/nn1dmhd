@@ -4,6 +4,8 @@ This problem definition file describes a static situation: unit pressure and
 density, all else is 0. The run should just converge to the initial values for
 each quantity.
 
+NOTE: These equations were verified on 2022-11-18.
+
 NOTE: The functions in this module are defined using a combination of Numpy and
 TensorFlow operations, so they can be used efficiently by the TensorFlow
 code.
