@@ -379,7 +379,7 @@ def pde_ρ(X, ψ, del_ψ):
     # dBz_dx = tf.reshape(del_Bz[:, 1], (n, 1))
 
     # G is a Tensor of shape (n, 1).
-    G = dρ_dx + ρ*dux_dx + dρ_dt*ux
+    G = dρ_dt + ρ*dux_dx + dρ_dx*ux
     return G
 
 
