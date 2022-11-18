@@ -3,7 +3,7 @@
 This problem definition file describes an Alfven wave: unit pressure and
 density, with a constant axial magnetic field (B0x = constant).
 
-This problem uses a minimal set of the linearized MHD equations.
+This problem uses the linearized MHD equations.
 
 NOTE: The functions in this module are defined using a combination of Numpy and
 TensorFlow operations, so they can be used efficiently by the TensorFlow
@@ -61,7 +61,11 @@ independent_variable_labels = [r'$t$', r'$x$']
 n_dim = len(independent_variable_names)
 
 # Names of dependent variables.
-dependent_variable_names = ['ρ1', 'P1', 'u1x', 'u1y', 'u1z', 'B1x', 'B1y', 'B1z']
+dependent_variable_names = [
+    'ρ1', 'P1',
+    'u1x', 'u1y', 'u1z',
+    'B1x', 'B1y', 'B1z'
+]
 
 # Labels for dependent variables (may use LaTex) - use for plots.
 dependent_variable_labels = [
@@ -126,7 +130,7 @@ u1x_amp = 0.0
 u1y_amp = 0.1
 u1z_amp = 0.0
 B1x_amp = 0.0
-B1y_amp = 0.0
+B1y_amp = 0.1
 B1z_amp = 0.0
 
 # Wavelength and wavenumber of initial perturbations.
@@ -305,9 +309,11 @@ def B1z_analytical(X: np.ndarray):
 # Gather all of the analytical solutions into a list.
 ψ_analytical = [
     ρ1_analytical,
+    P1_analytical,
     u1x_analytical,
     u1y_analytical,
     u1z_analytical,
+    B1x_analytical,
     B1y_analytical,
     B1z_analytical,
 ]
