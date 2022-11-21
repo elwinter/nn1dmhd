@@ -16,20 +16,20 @@ import numpy as np
 import seaborn as sns
 
 # Specify the run ID (aka problem name).
-runid = "alfven_wave"
+problem = sys.argv[1]
 
 # Add the subdirectory for the run results to the module search path.
-run_path = os.path.join(".", runid)
+run_path = os.path.join(".", problem)
 sys.path.append(run_path)
 
 # Import the problem definition from the run results directory.
-p = import_module(runid)
+p = import_module(problem)
 
 # Read the run hyperparameters from the run results directory.
 import hyperparameters as hp
 
 # Load the training points.
-tx_train = np.loadtxt(os.path.join(runid, "tx_train.dat"))
+tx_train = np.loadtxt(os.path.join(problem, "tx_train.dat"))
 # t_train = tx_train[:, 0]
 # x_train = tx_train[:, 1]
 
@@ -41,16 +41,16 @@ x_grid = tx_train[:hp.nx_train, 1]   # np.ndarray, shape (p.nx_train,)
 ψ = []
 delψ = []
 for var_name in p.dependent_variable_names:
-    ψ.append(np.loadtxt(os.path.join(runid, "%s_train.dat" % var_name)))
-    delψ.append(np.loadtxt(os.path.join(runid, "del_%s_train.dat" % var_name)))
+    ψ.append(np.loadtxt(os.path.join(problem, "%s_train.dat" % var_name)))
+    delψ.append(np.loadtxt(os.path.join(problem, "del_%s_train.dat" % var_name)))
 
 # Load the loss function histories.
-losses_model_all = np.loadtxt(os.path.join(runid, "losses_model_all.dat"))
-losses_model_bc = np.loadtxt(os.path.join(runid, "losses_model_bc.dat"))
-losses_model = np.loadtxt(os.path.join(runid, "losses_model.dat"))
-losses_all = np.loadtxt(os.path.join(runid, "losses_all.dat"))
-losses_bc = np.loadtxt(os.path.join(runid, "losses_bc.dat"))
-losses = np.loadtxt(os.path.join(runid, "losses.dat"))
+losses_model_all = np.loadtxt(os.path.join(problem, "losses_model_all.dat"))
+losses_model_bc = np.loadtxt(os.path.join(problem, "losses_model_bc.dat"))
+losses_model = np.loadtxt(os.path.join(problem, "losses_model.dat"))
+losses_all = np.loadtxt(os.path.join(problem, "losses_all.dat"))
+losses_bc = np.loadtxt(os.path.join(problem, "losses_bc.dat"))
+losses = np.loadtxt(os.path.join(problem, "losses.dat"))
 
 # Compute analytical solutions.
 ψ_a = []
@@ -107,7 +107,7 @@ plt.xlabel("Epoch")
 plt.ylabel("Loss function")
 plt.legend()
 plt.grid()
-plt.title("Loss function evolution for %s" % runid)
+plt.title("Loss function evolution for %s" % problem)
 plt.savefig("loss.png")
 plt.close()
 
