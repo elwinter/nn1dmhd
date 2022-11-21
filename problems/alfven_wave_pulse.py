@@ -3,6 +3,9 @@
 This problem definition file describes an Alfven wave: unit pressure and
 density, with a constant axial magnetic field (B0x = constant).
 
+This problem only specifies the initial condition, so the result is a single
+pulse propagating in t and x.
+
 This problem uses the linearized MHD equations.
 
 NOTE: The functions in this module are defined using a combination of Numpy and
