@@ -159,18 +159,18 @@ def main():
         print("Creating and saving training data.")
     # These are each 2-D NumPy arrays.
     # Shapes are (n_train, 2), (n_train_in, 2), (n_train_bc, 2)
-    xt_train, xt_train_in, xt_train_bc = p.create_training_data_gridded(
+    tx_train, tx_train_in, tx_train_bc = p.create_training_data_gridded(
         nx_train, nt_train
     )
     # Shape is (n_train, p.n_dim)
-    np.savetxt(os.path.join(output_dir, "xt_train.dat"), xt_train)
-    n_train = len(xt_train)
+    np.savetxt(os.path.join(output_dir, "tx_train.dat"), tx_train)
+    n_train = len(tx_train)
     # Shape is (n_train_in, p.n_dim)
-    np.savetxt(os.path.join(output_dir, "xt_train_in.dat"), xt_train_in)
-    n_train_in = len(xt_train_in)
+    np.savetxt(os.path.join(output_dir, "tx_train_in.dat"), tx_train_in)
+    n_train_in = len(tx_train_in)
     # Shape is (n_train_bc, p.n_dim)
-    np.savetxt(os.path.join(output_dir, "xt_train_bc.dat"), xt_train_bc)
-    n_train_bc = len(xt_train_bc)
+    np.savetxt(os.path.join(output_dir, "tx_train_bc.dat"), tx_train_bc)
+    n_train_bc = len(tx_train_bc)
     assert n_train == n_train_in + n_train_bc
 
     # Compute the boundary condition values in normalized dimensionless form.
@@ -180,7 +180,7 @@ def main():
     # bc0 contains the 0th-order (Dirichlet) boundary conditions on the
     # solution.
     # shape (n_train_bc, p.n_var)
-    bc0 = p.compute_boundary_conditions(xt_train_bc)
+    bc0 = p.compute_boundary_conditions(tx_train_bc)
     # Convert to Tensor, shape (n_train_bc, p.n_var).
     bc0 = tf.Variable(bc0, dtype=precision)
     if debug:
@@ -230,14 +230,14 @@ def main():
     # Rename the training data Variables for convenience.
     # The 2-D NumPy arrays must be converted to TensorFlow.
     # Shape (n_train, 2)
-    xt_train_var = tf.Variable(xt_train, dtype=precision)
-    xt = xt_train_var
+    tx_train_var = tf.Variable(tx_train, dtype=precision)
+    tx = tx_train_var
     # Shape (n_train_in, 2)
-    # xt_train_in_var = tf.Variable(xt_train_in, dtype=precision)
-    # xt_in = xt_train_in_var
+    # tx_train_in_var = tf.Variable(tx_train_in, dtype=precision)
+    # tx_in = tx_train_in_var
     # Shape (n_train_bc, 2)
-    xt_train_bc_var = tf.Variable(xt_train_bc, dtype=precision)
-    xt_bc = xt_train_bc_var
+    tx_train_bc_var = tf.Variable(tx_train_bc, dtype=precision)
+    tx_bc = tx_train_bc_var
 
     # Clear the convergence flag to start.
     converged = False
@@ -258,20 +258,20 @@ def main():
                 # N_all is a list of tf.Tensor objects.
                 # There are p.n_var Tensors in the list.
                 # Each Tensor has shape (n_train, 1).
-                N_all = [model(xt) for model in models]
+                N_all = [model(tx) for model in models]
 
                 # Compute the network outputs at the boundary training points.
                 # N_bc is a list of tf.Tensor objects.
                 # There are p.n_var Tensors in the list.
                 # Each Tensor has shape (n_train_bc, 1).
-                N_bc = [model(xt_bc) for model in models]
+                N_bc = [model(tx_bc) for model in models]
 
             # Compute the gradients of the network outputs wrt inputs at all
             # training points.
             # delN_all is a list of tf.Tensor objects.
             # There are p.n_var Tensors in the list.
             # Each Tensor has shape (n_train, p.n_dim).
-            delN_all = [tape1.gradient(N, xt) for N in N_all]
+            delN_all = [tape1.gradient(N, tx) for N in N_all]
 
             # Compute the estimates of the differential equations at all
             # training points.
@@ -279,7 +279,7 @@ def main():
             # There are p.n_var Tensors in the list.
             # Each Tensor has shape (n_train, 1).
             G_all = [
-                pde(xt, N_all, delN_all) for pde in p.differential_equations
+                pde(tx, N_all, delN_all) for pde in p.differential_equations
             ]
 
             # Compute the loss function for all points for each
@@ -422,39 +422,14 @@ def main():
         print("Computing and saving trained results.")
     # Shapes are ???
     with tf.GradientTape(persistent=True) as tape1:
-        N_train = [model(xt) for model in models]
-    delN_train = [tape1.gradient(N, xt) for N in N_train]
+        N_train = [model(tx) for model in models]
+    delN_train = [tape1.gradient(N, tx) for N in N_train]
     for i in range(p.n_var):
         np.savetxt(os.path.join(output_dir, "%s_train.dat" %
                    p.dependent_variable_names[i]),
                    tf.reshape(N_train[i], (n_train,)))
         np.savetxt(os.path.join(output_dir, "del_%s_train.dat" %
                    p.dependent_variable_names[i]), delN_train[i])
-
-    # Compute and save the trained results at validation points.
-    # if verbose:
-    #     print("Computing and saving validation results.")
-    # Shapes are (n_val, 2), (n_val_in, 2), (n_val_bc, 2).
-    # Shapes are (n_val, 2), (n_val_in, 2), (n_val_bc, 2).
-    # xt_val, xt_val_in, xt_val_bc = p.create_training_data(nx_val, nt_val)
-    # n_val = len(xt_val)
-    # n_val_in = len(xt_val_in)
-    # n_val_bc = len(xt_val_bc)
-    # assert n_val_bc == 2*(nx_val + nt_val - 2)
-    # assert n_val_in + n_val_bc == n_val
-    # np.savetxt(os.path.join(output_dir, "xt_val.dat"), xt_val)
-    # np.savetxt(os.path.join(output_dir, "xt_val_in.dat"), xt_val_in)
-    # np.savetxt(os.path.join(output_dir, "xt_val_bc.dat"), xt_val_bc)
-    # xt_val = tf.Variable(xt_val.reshape(n_val, 2), dtype=precision)
-    # with tf.GradientTape(persistent=True) as tape1:
-    #     N_val = [model(xt_val) for model in models]
-    # delN_val = [tape1.gradient(N, xt_val) for N in N_val]
-    # for i in range(p.n_var):
-    #     np.savetxt(os.path.join(output_dir, "%s_val.dat" %
-    #                p.dependent_variable_names[i]), tf.reshape(N_val[i],
-    #                (n_val,)))
-    #     np.savetxt(os.path.join(output_dir, "del_%s_val.dat" %
-    #                p.dependent_variable_names[i]), delN_val[i])
 
     # Save the trained models.
     if save_model:
