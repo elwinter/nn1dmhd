@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Visualize the results from a pde1bvp_coupled_pinn.py run.
+# Visualize the results from a pde1bvp_coupled_pinn_1D.py run.
 
 
 # Import standard modules.
@@ -16,7 +16,7 @@ import numpy as np
 import seaborn as sns
 
 # Specify the run ID (aka problem name).
-runid = "static1"
+runid = "alfven_wave"
 
 # Add the subdirectory for the run results to the module search path.
 run_path = os.path.join(".", runid)
@@ -29,15 +29,13 @@ p = import_module(runid)
 import hyperparameters as hp
 
 # Load the training points.
-xt_train = np.loadtxt(os.path.join(runid, "xt_train.dat"))
-x_train = xt_train[:, 0]
-t_train = xt_train[:, 1]
+tx_train = np.loadtxt(os.path.join(runid, "tx_train.dat"))
+# t_train = tx_train[:, 0]
+# x_train = tx_train[:, 1]
 
-# Extract the unique training point values.
-x_train_vals = x_train[::hp.nt_train]
-t_train_vals = t_train[:hp.nt_train]
-n_x_train_vals = len(x_train_vals)
-n_t_train_vals = len(t_train_vals)
+# Extract the grid coordinates, and count them.
+t_grid = tx_train[::hp.nx_train, 0]  # np.ndarray, shape (p.nt_train,)
+x_grid = tx_train[:hp.nx_train, 1]   # np.ndarray, shape (p.nx_train,)
 
 # Load the model-predicted values.
 ψ = []
@@ -57,12 +55,13 @@ losses = np.loadtxt(os.path.join(runid, "losses.dat"))
 # Compute analytical solutions.
 ψ_a = []
 for Ya in p.ψ_analytical:
-    ψ_a.append(Ya(xt_train))
+    ψ_a.append(Ya(tx_train))
 
 # Compute the error in the predicted solutions relative to the
 # analytical solutions.
 ψ_err = [m - a for (m, a) in zip(ψ, ψ_a)]
 rms_err = [np.sqrt(np.mean(e**2)) for e in ψ_err]
+print("rms_err = %s" % rms_err)
 
 # Compute the number of rows for the 2-per-row plot.
 n_rows = m.ceil(p.n_var/2)
@@ -113,34 +112,14 @@ plt.savefig("loss.png")
 plt.close()
 
 # Compute the heat map tick locations and labels.
+# x will be the horizontal coordinate.
+# t will be the vertical coordinate.
 n_x_ticks = 5
 n_t_ticks = 5
-x_tick_pos = np.linspace(0, n_x_train_vals - 1, n_x_ticks)
-x_tick_labels = ["%.1f" % (x/(n_x_train_vals - 1)) for x in x_tick_pos]
-t_tick_pos = np.linspace(0, n_t_train_vals - 1, n_t_ticks)
-t_tick_labels = ["%.1f" % (p.t0 + t/(n_t_train_vals - 1)*(p.t1 - p.t0)) for t in t_tick_pos]
-t_tick_labels = reversed(t_tick_labels)
-# vmin = [-np.sum(p.n1_amp), -np.sum(p.v1x_amp), -np.sum(p.E1x_amp)]
-# vmax = [np.sum(p.n1_amp), np.sum(p.v1x_amp), np.sum(p.E1x_amp)]
-
-# Plot the model-predicted solutions.
-plt.figure(figsize=heatmap_figsize)
-for i in range(p.n_var):
-    plt.subplot(n_rows, 2, i + 1)
-    variable_name = p.dependent_variable_names[i]
-    variable_label = p.dependent_variable_labels[i]
-    # For a Seaborn heat map, reshape as (n_x, n_y), then transpose, then flip.
-    Z = np.flip(ψ[i].reshape(hp.nx_train, hp.nt_train).T, axis=0)
-#     ax = sns.heatmap(Z, vmin=vmin[i], vmax=vmax[i])
-    ax = sns.heatmap(Z)
-    plt.xticks(x_tick_pos, x_tick_labels)
-    plt.yticks(t_tick_pos, t_tick_labels)
-    ax.set_xlabel("x")
-    ax.set_ylabel("t")
-    plt.title(variable_label)
-plt.suptitle("Predicted")
-plt.savefig("models.png")
-plt.close()
+x_tick_pos = np.linspace(0, hp.nx_train - 1, n_x_ticks)
+x_tick_labels = ["%.2f" % (p.x0 + x/(hp.nx_train - 1)*(p.x1 - p.x0)) for x in x_tick_pos]
+t_tick_pos = np.linspace(0, hp.nt_train - 1, n_t_ticks)
+t_tick_labels = list(reversed(["%.2f" % (p.t0 + t/(hp.nt_train - 1)*(p.t1 - p.t0)) for t in t_tick_pos]))
 
 # Plot the analytical solutions.
 plt.figure(figsize=heatmap_figsize)
@@ -148,17 +127,34 @@ for i in range(p.n_var):
     plt.subplot(n_rows, 2, i + 1)
     variable_name = p.dependent_variable_names[i]
     variable_label = p.dependent_variable_labels[i]
-    # For a Seaborn heat map, reshape as (n_x, n_y), then transpose, then flip.
-    Z = np.flip(ψ_a[i].reshape(hp.nx_train, hp.nt_train).T, axis=0)
-    # ax = sns.heatmap(Z, vmin=vmin[i], vmax=vmax[i])
+    # For a Seaborn heat map, reshape as (n_t, n_x), then flip.
+    Z = np.flip(ψ_a[i].reshape(hp.nt_train, hp.nx_train), axis=0)
     ax = sns.heatmap(Z)
     plt.xticks(x_tick_pos, x_tick_labels)
     plt.yticks(t_tick_pos, t_tick_labels)
-    ax.set_xlabel("x")
-    ax.set_ylabel("t")
+    plt.xlabel("x")
+    plt.ylabel("t")
     plt.title(variable_label)
 plt.suptitle("Analytical")
 plt.savefig("analytical.png")
+plt.close()
+
+# Plot the model-predicted solutions.
+plt.figure(figsize=heatmap_figsize)
+for i in range(p.n_var):
+    plt.subplot(n_rows, 2, i + 1)
+    variable_name = p.dependent_variable_names[i]
+    variable_label = p.dependent_variable_labels[i]
+    # For a Seaborn heat map, reshape as (n_t, n_x), then flip.
+    Z = np.flip(ψ[i].reshape(hp.nt_train, hp.nx_train), axis=0)
+    ax = sns.heatmap(Z)
+    plt.xticks(x_tick_pos, x_tick_labels)
+    plt.yticks(t_tick_pos, t_tick_labels)
+    plt.xlabel("x")
+    plt.ylabel("t")
+    plt.title(variable_label)
+plt.suptitle("Predicted")
+plt.savefig("predicted.png")
 plt.close()
 
 # Plot the error in the predicted solutions.
@@ -167,12 +163,11 @@ for i in range(p.n_var):
     plt.subplot(n_rows, 2, i + 1)
     variable_name = p.dependent_variable_names[0]
     variable_label = p.dependent_variable_labels[i]
-    # For a Seaborn heat map, reshape as (n_x, n_y), then transpose, then flip.
-    Z = np.flip(ψ_err[i].reshape(hp.nx_train, hp.nt_train).T, axis=0)
-    # ax = sns.heatmap(Z, vmin=0.1*vmin[i], vmax=0.1*vmax[i])
+    # For a Seaborn heat map, reshape as (n_t, n_x), then flip.
+    Z = np.flip(ψ_err[i].reshape(hp.nt_train, hp.nx_train).T, axis=0)
     ax = sns.heatmap(Z)
-    plt.xticks(x_tick_pos, x_tick_labels)
-    plt.yticks(t_tick_pos, t_tick_labels)
+    plt.xticks(t_tick_pos, t_tick_labels)
+    plt.yticks(x_tick_pos, x_tick_labels)
     ax.set_xlabel("x")
     ax.set_ylabel("t")
     plt.title("%s, RMS error = %.1e" % (variable_label, rms_err[i]))
@@ -188,15 +183,14 @@ for i in range(p.n_var):
 
     # Compare predicted and analytical values at the starting time.
     plt.subplot(p.n_var, 2, i*2 + 1)
-    x = x_train_vals
-    y = ψ[i][0::hp.nt_train]
-    y_a = ψ_a[i][0::hp.nt_train]
-    y_err = ψ_err[i][0::hp.nt_train]
+    x = x_grid
+    y = ψ[i][:hp.nx_train]
+    y_a = ψ_a[i][:hp.nx_train]
+    y_err = ψ_err[i][:hp.nx_train]
     rms_err = np.sqrt(np.mean(y_err**2))
     plt.plot(x, y, label="$%s_p$" % variable_name)
     plt.plot(x, y_a, label="$%s_a$" % variable_name)
     plt.plot(x, y_err, label="$%s_{err}$" % variable_name)
-#     plt.ylim(vmin[i], vmax[i])
     plt.grid()
     plt.legend()
     plt.title("t = %.1f, RMS err = %.1e" % (p.t0, rms_err))
@@ -204,18 +198,16 @@ for i in range(p.n_var):
     plt.ylabel(variable_label)
 
     plt.subplot(p.n_var, 2, i*2 + 2)
-    x = x_train_vals
-    y = ψ[i][hp.nt_train - 1::hp.nt_train]
-    y_a = ψ_a[i][hp.nt_train - 1::hp.nt_train]
-    y_err = ψ_err[i][hp.nt_train - 1::hp.nt_train]
+    y = ψ[i][-hp.nx_train:]
+    y_a = ψ_a[i][-hp.nx_train:]
+    y_err = ψ_err[i][-hp.nx_train:]
     rms_err = np.sqrt(np.mean(y_err**2))
     plt.plot(x, y, label="$%s_p$" % variable_name)
     plt.plot(x, y_a, label="$%s_a$" % variable_name)
     plt.plot(x, y_err, label="$%s_{err}$" % variable_name)
-#     plt.ylim(vmin[i], vmax[i])
     plt.grid()
     plt.legend()
-    plt.title("t = %.1f, RMS err = %.1e" % (p.t1, rms_err))
+    plt.title("t = %.1f, RMS err = %.1e" % (p.t0, rms_err))
     plt.xlabel(p.independent_variable_labels[0])
     plt.ylabel(variable_label)
 plt.suptitle("Start and end comparison")
