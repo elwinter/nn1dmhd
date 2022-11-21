@@ -2,7 +2,8 @@
 
 Modules
 -------
-alfven_wave_3.py
+alfven_wave_pulse.py
+alfven_wave_train.py
 static1.py
 static2.py
 static3.py
