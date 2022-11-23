@@ -3,11 +3,12 @@
 import os
 import re
 
+# Specify set parameters.
 n_layerss = [1]
 Hs = [10]
 learning_rates = [0.01]
 nt_trains = [10]
-nx_trains = [20]
+nx_trains = [10]
 w_bcs = [0.95]
 max_epochss = [100]
 
@@ -61,7 +62,7 @@ for n_layers in n_layerss:
                             # Print the summary line.
                             print("%s,mollie,float32,%d,%d,0.01,%d,%d,%g,%d,%s,%s,%s,%s" %
                                   (run_end_time, n_layers, H,
-                                   nx_train, nt_train, w_bc,
+                                   nt_train, nx_train, w_bc,
                                    max_epochs, run_elapsed_time, L, L_all, L_bc))
 
                             # Move back to the starting directory.
