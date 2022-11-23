@@ -5,12 +5,15 @@ import os
 import sys
 
 
+# Specify the path to the problem file.
 problem = sys.argv[1]
+
+# Specify set parameters.
 n_layerss = [1]
 Hs = [10]
 learning_rates = [0.01]
 nt_trains = [10]
-nx_trains = [20]
+nx_trains = [10]
 w_bcs = [0.95]
 max_epochss = [100]
 
