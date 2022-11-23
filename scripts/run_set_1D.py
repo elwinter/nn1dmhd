@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Run a set of pde1_bvp_coupled_pinn.py runs.
+# Run a set of training sessions.
 
 
 # Import standard modules.
@@ -17,7 +17,7 @@ n_layerss = [1]
 Hs = [10]
 learning_rates = [0.01]
 nt_trains = [10]
-nx_trains = [20]
+nx_trains = [10]
 w_bcs = [0.95]
 max_epochss = [100]
 
