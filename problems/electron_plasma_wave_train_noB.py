@@ -419,10 +419,9 @@ def pde_n1(X, ψ, del_ψ):
     n = X.shape[0]
     t = tf.reshape(X[:, 0], (n, 1))
     x = tf.reshape(X[:, 1], (n, 1))
-    (n1, P1, u1x, u1y, u1z, B1x, B1y, B1z, E1x, E1y, E1z) = ψ
+    (n1, P1, u1x, u1y, u1z, E1x, E1y, E1z) = ψ
     (del_n1, del_P1,
      del_u1x, del_u1y, del_u1z,
-     del_B1x, del_B1y, del_B1z,
      del_E1x, del_E1y, del_E1z) = del_ψ
     dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
     dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
@@ -434,12 +433,6 @@ def pde_n1(X, ψ, del_ψ):
     du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
     du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
     du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
-    dB1x_dt = tf.reshape(del_B1x[:, 0], (n, 1))
-    dB1x_dx = tf.reshape(del_B1x[:, 1], (n, 1))
-    dB1y_dt = tf.reshape(del_B1y[:, 0], (n, 1))
-    dB1y_dx = tf.reshape(del_B1y[:, 1], (n, 1))
-    dB1z_dt = tf.reshape(del_B1z[:, 0], (n, 1))
-    dB1z_dx = tf.reshape(del_B1z[:, 1], (n, 1))
     dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
     dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
     dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
@@ -477,10 +470,9 @@ def pde_P1(X, ψ, del_ψ):
     n = X.shape[0]
     t = tf.reshape(X[:, 0], (n, 1))
     x = tf.reshape(X[:, 1], (n, 1))
-    (n1, P1, u1x, u1y, u1z, B1x, B1y, B1z, E1x, E1y, E1z) = ψ
+    (n1, P1, u1x, u1y, u1z, E1x, E1y, E1z) = ψ
     (del_n1, del_P1,
      del_u1x, del_u1y, del_u1z,
-     del_B1x, del_B1y, del_B1z,
      del_E1x, del_E1y, del_E1z) = del_ψ
     dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
     dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
@@ -492,12 +484,6 @@ def pde_P1(X, ψ, del_ψ):
     du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
     du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
     du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
-    dB1x_dt = tf.reshape(del_B1x[:, 0], (n, 1))
-    dB1x_dx = tf.reshape(del_B1x[:, 1], (n, 1))
-    dB1y_dt = tf.reshape(del_B1y[:, 0], (n, 1))
-    dB1y_dx = tf.reshape(del_B1y[:, 1], (n, 1))
-    dB1z_dt = tf.reshape(del_B1z[:, 0], (n, 1))
-    dB1z_dx = tf.reshape(del_B1z[:, 1], (n, 1))
     dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
     dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
     dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
@@ -535,10 +521,9 @@ def pde_u1x(X, ψ, del_ψ):
     n = X.shape[0]
     t = tf.reshape(X[:, 0], (n, 1))
     x = tf.reshape(X[:, 1], (n, 1))
-    (n1, P1, u1x, u1y, u1z, B1x, B1y, B1z, E1x, E1y, E1z) = ψ
+    (n1, P1, u1x, u1y, u1z, E1x, E1y, E1z) = ψ
     (del_n1, del_P1,
      del_u1x, del_u1y, del_u1z,
-     del_B1x, del_B1y, del_B1z,
      del_E1x, del_E1y, del_E1z) = del_ψ
     dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
     dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
@@ -550,12 +535,6 @@ def pde_u1x(X, ψ, del_ψ):
     du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
     du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
     du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
-    dB1x_dt = tf.reshape(del_B1x[:, 0], (n, 1))
-    dB1x_dx = tf.reshape(del_B1x[:, 1], (n, 1))
-    dB1y_dt = tf.reshape(del_B1y[:, 0], (n, 1))
-    dB1y_dx = tf.reshape(del_B1y[:, 1], (n, 1))
-    dB1z_dt = tf.reshape(del_B1z[:, 0], (n, 1))
-    dB1z_dx = tf.reshape(del_B1z[:, 1], (n, 1))
     dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
     dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
     dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
@@ -593,10 +572,9 @@ def pde_u1y(X, ψ, del_ψ):
     n = X.shape[0]
     t = tf.reshape(X[:, 0], (n, 1))
     x = tf.reshape(X[:, 1], (n, 1))
-    (n1, P1, u1x, u1y, u1z, B1x, B1y, B1z, E1x, E1y, E1z) = ψ
+    (n1, P1, u1x, u1y, u1z, E1x, E1y, E1z) = ψ
     (del_n1, del_P1,
      del_u1x, del_u1y, del_u1z,
-     del_B1x, del_B1y, del_B1z,
      del_E1x, del_E1y, del_E1z) = del_ψ
     dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
     dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
@@ -608,12 +586,6 @@ def pde_u1y(X, ψ, del_ψ):
     du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
     du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
     du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
-    dB1x_dt = tf.reshape(del_B1x[:, 0], (n, 1))
-    dB1x_dx = tf.reshape(del_B1x[:, 1], (n, 1))
-    dB1y_dt = tf.reshape(del_B1y[:, 0], (n, 1))
-    dB1y_dx = tf.reshape(del_B1y[:, 1], (n, 1))
-    dB1z_dt = tf.reshape(del_B1z[:, 0], (n, 1))
-    dB1z_dx = tf.reshape(del_B1z[:, 1], (n, 1))
     dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
     dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
     dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
@@ -651,10 +623,9 @@ def pde_u1z(X, ψ, del_ψ):
     n = X.shape[0]
     t = tf.reshape(X[:, 0], (n, 1))
     x = tf.reshape(X[:, 1], (n, 1))
-    (n1, P1, u1x, u1y, u1z, B1x, B1y, B1z, E1x, E1y, E1z) = ψ
+    (n1, P1, u1x, u1y, u1z, E1x, E1y, E1z) = ψ
     (del_n1, del_P1,
      del_u1x, del_u1y, del_u1z,
-     del_B1x, del_B1y, del_B1z,
      del_E1x, del_E1y, del_E1z) = del_ψ
     dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
     dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
@@ -666,12 +637,6 @@ def pde_u1z(X, ψ, del_ψ):
     du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
     du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
     du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
-    dB1x_dt = tf.reshape(del_B1x[:, 0], (n, 1))
-    dB1x_dx = tf.reshape(del_B1x[:, 1], (n, 1))
-    dB1y_dt = tf.reshape(del_B1y[:, 0], (n, 1))
-    dB1y_dx = tf.reshape(del_B1y[:, 1], (n, 1))
-    dB1z_dt = tf.reshape(del_B1z[:, 0], (n, 1))
-    dB1z_dx = tf.reshape(del_B1z[:, 1], (n, 1))
     dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
     dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
     dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
@@ -713,10 +678,9 @@ def pde_E1x(X, ψ, del_ψ):
     n = X.shape[0]
     t = tf.reshape(X[:, 0], (n, 1))
     x = tf.reshape(X[:, 1], (n, 1))
-    (n1, P1, u1x, u1y, u1z, B1x, B1y, B1z, E1x, E1y, E1z) = ψ
+    (n1, P1, u1x, u1y, u1z, E1x, E1y, E1z) = ψ
     (del_n1, del_P1,
      del_u1x, del_u1y, del_u1z,
-     del_B1x, del_B1y, del_B1z,
      del_E1x, del_E1y, del_E1z) = del_ψ
     dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
     dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
@@ -728,12 +692,6 @@ def pde_E1x(X, ψ, del_ψ):
     du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
     du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
     du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
-    dB1x_dt = tf.reshape(del_B1x[:, 0], (n, 1))
-    dB1x_dx = tf.reshape(del_B1x[:, 1], (n, 1))
-    dB1y_dt = tf.reshape(del_B1y[:, 0], (n, 1))
-    dB1y_dx = tf.reshape(del_B1y[:, 1], (n, 1))
-    dB1z_dt = tf.reshape(del_B1z[:, 0], (n, 1))
-    dB1z_dx = tf.reshape(del_B1z[:, 1], (n, 1))
     dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
     dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
     dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
@@ -771,10 +729,9 @@ def pde_E1y(X, ψ, del_ψ):
     n = X.shape[0]
     t = tf.reshape(X[:, 0], (n, 1))
     x = tf.reshape(X[:, 1], (n, 1))
-    (n1, P1, u1x, u1y, u1z, B1x, B1y, B1z, E1x, E1y, E1z) = ψ
+    (n1, P1, u1x, u1y, u1z, E1x, E1y, E1z) = ψ
     (del_n1, del_P1,
      del_u1x, del_u1y, del_u1z,
-     del_B1x, del_B1y, del_B1z,
      del_E1x, del_E1y, del_E1z) = del_ψ
     dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
     dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
@@ -786,12 +743,6 @@ def pde_E1y(X, ψ, del_ψ):
     du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
     du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
     du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
-    dB1x_dt = tf.reshape(del_B1x[:, 0], (n, 1))
-    dB1x_dx = tf.reshape(del_B1x[:, 1], (n, 1))
-    dB1y_dt = tf.reshape(del_B1y[:, 0], (n, 1))
-    dB1y_dx = tf.reshape(del_B1y[:, 1], (n, 1))
-    dB1z_dt = tf.reshape(del_B1z[:, 0], (n, 1))
-    dB1z_dx = tf.reshape(del_B1z[:, 1], (n, 1))
     dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
     dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
     dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
@@ -800,7 +751,7 @@ def pde_E1y(X, ψ, del_ψ):
     dE1z_dx = tf.reshape(del_E1z[:, 1], (n, 1))
 
     # G is a Tensor of shape (n, 1).
-    G = dE1y_dt + 1/(μ0*ε0)*dB1z_dx - 𝑒/ε0*n0*u1y
+    G = dE1y_dt - 𝑒/ε0*n0*u1y
     return G
 
 
@@ -829,10 +780,9 @@ def pde_E1z(X, ψ, del_ψ):
     n = X.shape[0]
     t = tf.reshape(X[:, 0], (n, 1))
     x = tf.reshape(X[:, 1], (n, 1))
-    (n1, P1, u1x, u1y, u1z, B1x, B1y, B1z, E1x, E1y, E1z) = ψ
+    (n1, P1, u1x, u1y, u1z, E1x, E1y, E1z) = ψ
     (del_n1, del_P1,
      del_u1x, del_u1y, del_u1z,
-     del_B1x, del_B1y, del_B1z,
      del_E1x, del_E1y, del_E1z) = del_ψ
     dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
     dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
@@ -844,12 +794,6 @@ def pde_E1z(X, ψ, del_ψ):
     du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
     du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
     du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
-    dB1x_dt = tf.reshape(del_B1x[:, 0], (n, 1))
-    dB1x_dx = tf.reshape(del_B1x[:, 1], (n, 1))
-    dB1y_dt = tf.reshape(del_B1y[:, 0], (n, 1))
-    dB1y_dx = tf.reshape(del_B1y[:, 1], (n, 1))
-    dB1z_dt = tf.reshape(del_B1z[:, 0], (n, 1))
-    dB1z_dx = tf.reshape(del_B1z[:, 1], (n, 1))
     dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
     dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
     dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
@@ -858,7 +802,7 @@ def pde_E1z(X, ψ, del_ψ):
     dE1z_dx = tf.reshape(del_E1z[:, 1], (n, 1))
 
     # G is a Tensor of shape (n, 1).
-    G = dE1z_dt - 1/(μ0*ε0)*dB1y_dx - 𝑒/ε0*n0*u1z
+    G = dE1z_dt - 𝑒/ε0*n0*u1z
     return G
 
 
