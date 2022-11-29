@@ -171,7 +171,7 @@ def E1xa(xt):
     return E1x
 
 
-def create_training_data(nx:int, nt:int):
+def create_training_data_gridded(nx:int, nt:int):
     """Create the training data.
 
     Create and return a set of training data of points evenly spaced in x and
