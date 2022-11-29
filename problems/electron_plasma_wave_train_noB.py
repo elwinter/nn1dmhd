@@ -108,9 +108,6 @@ P0 = 1.0
 u0x = 0.0
 u0y = 0.0
 u0z = 0.0
-B0x = 0.0
-B0y = 0.0
-B0z = 0.0
 E0x = 0.0
 E0y = 0.0
 E0z = 0.0
@@ -417,28 +414,28 @@ def pde_n1(X, ψ, del_ψ):
         Value of differential equation at each evaluation point.
     """
     n = X.shape[0]
-    t = tf.reshape(X[:, 0], (n, 1))
-    x = tf.reshape(X[:, 1], (n, 1))
-    (n1, P1, u1x, u1y, u1z, E1x, E1y, E1z) = ψ
+    # t = tf.reshape(X[:, 0], (n, 1))
+    # x = tf.reshape(X[:, 1], (n, 1))
+    # (n1, P1, u1x, u1y, u1z, E1x, E1y, E1z) = ψ
     (del_n1, del_P1,
      del_u1x, del_u1y, del_u1z,
      del_E1x, del_E1y, del_E1z) = del_ψ
     dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
-    dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
-    dP1_dt = tf.reshape(del_P1[:, 0], (n, 1))
-    dP1_dx = tf.reshape(del_P1[:, 1], (n, 1))
-    du1x_dt = tf.reshape(del_u1x[:, 0], (n, 1))
+    # dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
+    # dP1_dt = tf.reshape(del_P1[:, 0], (n, 1))
+    # dP1_dx = tf.reshape(del_P1[:, 1], (n, 1))
+    # du1x_dt = tf.reshape(del_u1x[:, 0], (n, 1))
     du1x_dx = tf.reshape(del_u1x[:, 1], (n, 1))
-    du1y_dt = tf.reshape(del_u1y[:, 0], (n, 1))
-    du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
-    du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
-    du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
-    dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
-    dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
-    dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
-    dE1y_dx = tf.reshape(del_E1y[:, 1], (n, 1))
-    dE1z_dt = tf.reshape(del_E1z[:, 0], (n, 1))
-    dE1z_dx = tf.reshape(del_E1z[:, 1], (n, 1))
+    # du1y_dt = tf.reshape(del_u1y[:, 0], (n, 1))
+    # du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
+    # du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
+    # du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
+    # dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
+    # dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
+    # dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
+    # dE1y_dx = tf.reshape(del_E1y[:, 1], (n, 1))
+    # dE1z_dt = tf.reshape(del_E1z[:, 0], (n, 1))
+    # dE1z_dx = tf.reshape(del_E1z[:, 1], (n, 1))
 
     # G is a Tensor of shape (n, 1).
     G = dn1_dt + n0*du1x_dx
@@ -468,28 +465,28 @@ def pde_P1(X, ψ, del_ψ):
         Value of differential equation at each evaluation point.
     """
     n = X.shape[0]
-    t = tf.reshape(X[:, 0], (n, 1))
-    x = tf.reshape(X[:, 1], (n, 1))
-    (n1, P1, u1x, u1y, u1z, E1x, E1y, E1z) = ψ
+    # t = tf.reshape(X[:, 0], (n, 1))
+    # x = tf.reshape(X[:, 1], (n, 1))
+    # (n1, P1, u1x, u1y, u1z, E1x, E1y, E1z) = ψ
     (del_n1, del_P1,
      del_u1x, del_u1y, del_u1z,
      del_E1x, del_E1y, del_E1z) = del_ψ
     dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
-    dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
+    # dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
     dP1_dt = tf.reshape(del_P1[:, 0], (n, 1))
-    dP1_dx = tf.reshape(del_P1[:, 1], (n, 1))
-    du1x_dt = tf.reshape(del_u1x[:, 0], (n, 1))
-    du1x_dx = tf.reshape(del_u1x[:, 1], (n, 1))
-    du1y_dt = tf.reshape(del_u1y[:, 0], (n, 1))
-    du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
-    du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
-    du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
-    dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
-    dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
-    dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
-    dE1y_dx = tf.reshape(del_E1y[:, 1], (n, 1))
-    dE1z_dt = tf.reshape(del_E1z[:, 0], (n, 1))
-    dE1z_dx = tf.reshape(del_E1z[:, 1], (n, 1))
+    # dP1_dx = tf.reshape(del_P1[:, 1], (n, 1))
+    # du1x_dt = tf.reshape(del_u1x[:, 0], (n, 1))
+    # du1x_dx = tf.reshape(del_u1x[:, 1], (n, 1))
+    # du1y_dt = tf.reshape(del_u1y[:, 0], (n, 1))
+    # du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
+    # du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
+    # du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
+    # dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
+    # dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
+    # dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
+    # dE1y_dx = tf.reshape(del_E1y[:, 1], (n, 1))
+    # dE1z_dt = tf.reshape(del_E1z[:, 0], (n, 1))
+    # dE1z_dx = tf.reshape(del_E1z[:, 1], (n, 1))
 
     # G is a Tensor of shape (n, 1).
     G = dP1_dt - ɣ*P0/n0*dn1_dt
@@ -519,31 +516,31 @@ def pde_u1x(X, ψ, del_ψ):
         Value of differential equation at each evaluation point.
     """
     n = X.shape[0]
-    t = tf.reshape(X[:, 0], (n, 1))
-    x = tf.reshape(X[:, 1], (n, 1))
+    # t = tf.reshape(X[:, 0], (n, 1))
+    # x = tf.reshape(X[:, 1], (n, 1))
     (n1, P1, u1x, u1y, u1z, E1x, E1y, E1z) = ψ
     (del_n1, del_P1,
      del_u1x, del_u1y, del_u1z,
      del_E1x, del_E1y, del_E1z) = del_ψ
-    dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
+    # dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
     dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
-    dP1_dt = tf.reshape(del_P1[:, 0], (n, 1))
-    dP1_dx = tf.reshape(del_P1[:, 1], (n, 1))
+    # dP1_dt = tf.reshape(del_P1[:, 0], (n, 1))
+    # dP1_dx = tf.reshape(del_P1[:, 1], (n, 1))
     du1x_dt = tf.reshape(del_u1x[:, 0], (n, 1))
-    du1x_dx = tf.reshape(del_u1x[:, 1], (n, 1))
-    du1y_dt = tf.reshape(del_u1y[:, 0], (n, 1))
-    du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
-    du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
-    du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
-    dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
-    dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
-    dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
-    dE1y_dx = tf.reshape(del_E1y[:, 1], (n, 1))
-    dE1z_dt = tf.reshape(del_E1z[:, 0], (n, 1))
-    dE1z_dx = tf.reshape(del_E1z[:, 1], (n, 1))
+    # du1x_dx = tf.reshape(del_u1x[:, 1], (n, 1))
+    # du1y_dt = tf.reshape(del_u1y[:, 0], (n, 1))
+    # du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
+    # du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
+    # du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
+    # dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
+    # dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
+    # dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
+    # dE1y_dx = tf.reshape(del_E1y[:, 1], (n, 1))
+    # dE1z_dt = tf.reshape(del_E1z[:, 0], (n, 1))
+    # dE1z_dx = tf.reshape(del_E1z[:, 1], (n, 1))
 
     # G is a Tensor of shape (n, 1).
-    G = du1x_dt + ɣ*𝑘b*T/(𝑚e*n0)*dn1_dx - 𝑒/𝑚e*E1x
+    G = du1x_dt + ɣ*𝑘b*T/(𝑚e*n0)*dn1_dx + 𝑒/𝑚e*E1x
     return G
 
 
@@ -570,31 +567,31 @@ def pde_u1y(X, ψ, del_ψ):
         Value of differential equation at each evaluation point.
     """
     n = X.shape[0]
-    t = tf.reshape(X[:, 0], (n, 1))
-    x = tf.reshape(X[:, 1], (n, 1))
+    # t = tf.reshape(X[:, 0], (n, 1))
+    # x = tf.reshape(X[:, 1], (n, 1))
     (n1, P1, u1x, u1y, u1z, E1x, E1y, E1z) = ψ
     (del_n1, del_P1,
      del_u1x, del_u1y, del_u1z,
      del_E1x, del_E1y, del_E1z) = del_ψ
-    dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
-    dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
-    dP1_dt = tf.reshape(del_P1[:, 0], (n, 1))
-    dP1_dx = tf.reshape(del_P1[:, 1], (n, 1))
-    du1x_dt = tf.reshape(del_u1x[:, 0], (n, 1))
-    du1x_dx = tf.reshape(del_u1x[:, 1], (n, 1))
+    # dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
+    # dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
+    # dP1_dt = tf.reshape(del_P1[:, 0], (n, 1))
+    # dP1_dx = tf.reshape(del_P1[:, 1], (n, 1))
+    # du1x_dt = tf.reshape(del_u1x[:, 0], (n, 1))
+    # du1x_dx = tf.reshape(del_u1x[:, 1], (n, 1))
     du1y_dt = tf.reshape(del_u1y[:, 0], (n, 1))
-    du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
-    du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
-    du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
-    dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
-    dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
-    dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
-    dE1y_dx = tf.reshape(del_E1y[:, 1], (n, 1))
-    dE1z_dt = tf.reshape(del_E1z[:, 0], (n, 1))
-    dE1z_dx = tf.reshape(del_E1z[:, 1], (n, 1))
+    # du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
+    # du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
+    # du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
+    # dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
+    # dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
+    # dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
+    # dE1y_dx = tf.reshape(del_E1y[:, 1], (n, 1))
+    # dE1z_dt = tf.reshape(del_E1z[:, 0], (n, 1))
+    # dE1z_dx = tf.reshape(del_E1z[:, 1], (n, 1))
 
     # G is a Tensor of shape (n, 1).
-    G = du1y_dt - 𝑒/𝑚e*E1y
+    G = du1y_dt + 𝑒/𝑚e*E1y
     return G
 
 
@@ -621,31 +618,31 @@ def pde_u1z(X, ψ, del_ψ):
         Value of differential equation at each evaluation point.
     """
     n = X.shape[0]
-    t = tf.reshape(X[:, 0], (n, 1))
-    x = tf.reshape(X[:, 1], (n, 1))
+    # t = tf.reshape(X[:, 0], (n, 1))
+    # x = tf.reshape(X[:, 1], (n, 1))
     (n1, P1, u1x, u1y, u1z, E1x, E1y, E1z) = ψ
     (del_n1, del_P1,
      del_u1x, del_u1y, del_u1z,
      del_E1x, del_E1y, del_E1z) = del_ψ
-    dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
-    dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
-    dP1_dt = tf.reshape(del_P1[:, 0], (n, 1))
-    dP1_dx = tf.reshape(del_P1[:, 1], (n, 1))
-    du1x_dt = tf.reshape(del_u1x[:, 0], (n, 1))
-    du1x_dx = tf.reshape(del_u1x[:, 1], (n, 1))
-    du1y_dt = tf.reshape(del_u1y[:, 0], (n, 1))
-    du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
+    # dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
+    # dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
+    # dP1_dt = tf.reshape(del_P1[:, 0], (n, 1))
+    # dP1_dx = tf.reshape(del_P1[:, 1], (n, 1))
+    # du1x_dt = tf.reshape(del_u1x[:, 0], (n, 1))
+    # du1x_dx = tf.reshape(del_u1x[:, 1], (n, 1))
+    # du1y_dt = tf.reshape(del_u1y[:, 0], (n, 1))
+    # du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
     du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
-    du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
-    dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
-    dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
-    dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
-    dE1y_dx = tf.reshape(del_E1y[:, 1], (n, 1))
-    dE1z_dt = tf.reshape(del_E1z[:, 0], (n, 1))
-    dE1z_dx = tf.reshape(del_E1z[:, 1], (n, 1))
+    # du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
+    # dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
+    # dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
+    # dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
+    # dE1y_dx = tf.reshape(del_E1y[:, 1], (n, 1))
+    # dE1z_dt = tf.reshape(del_E1z[:, 0], (n, 1))
+    # dE1z_dx = tf.reshape(del_E1z[:, 1], (n, 1))
 
     # G is a Tensor of shape (n, 1).
-    G = du1z_dt - 𝑒/𝑚e*E1z
+    G = du1z_dt + 𝑒/𝑚e*E1z
     return G
 
     # G is a Tensor of shape (n, 1).
@@ -676,28 +673,28 @@ def pde_E1x(X, ψ, del_ψ):
         Value of differential equation at each evaluation point.
     """
     n = X.shape[0]
-    t = tf.reshape(X[:, 0], (n, 1))
-    x = tf.reshape(X[:, 1], (n, 1))
+    # t = tf.reshape(X[:, 0], (n, 1))
+    # x = tf.reshape(X[:, 1], (n, 1))
     (n1, P1, u1x, u1y, u1z, E1x, E1y, E1z) = ψ
     (del_n1, del_P1,
      del_u1x, del_u1y, del_u1z,
      del_E1x, del_E1y, del_E1z) = del_ψ
-    dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
-    dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
-    dP1_dt = tf.reshape(del_P1[:, 0], (n, 1))
-    dP1_dx = tf.reshape(del_P1[:, 1], (n, 1))
-    du1x_dt = tf.reshape(del_u1x[:, 0], (n, 1))
-    du1x_dx = tf.reshape(del_u1x[:, 1], (n, 1))
-    du1y_dt = tf.reshape(del_u1y[:, 0], (n, 1))
-    du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
-    du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
-    du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
+    # dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
+    # dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
+    # dP1_dt = tf.reshape(del_P1[:, 0], (n, 1))
+    # dP1_dx = tf.reshape(del_P1[:, 1], (n, 1))
+    # du1x_dt = tf.reshape(del_u1x[:, 0], (n, 1))
+    # du1x_dx = tf.reshape(del_u1x[:, 1], (n, 1))
+    # du1y_dt = tf.reshape(del_u1y[:, 0], (n, 1))
+    # du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
+    # du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
+    # du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
     dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
-    dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
-    dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
-    dE1y_dx = tf.reshape(del_E1y[:, 1], (n, 1))
-    dE1z_dt = tf.reshape(del_E1z[:, 0], (n, 1))
-    dE1z_dx = tf.reshape(del_E1z[:, 1], (n, 1))
+    # dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
+    # dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
+    # dE1y_dx = tf.reshape(del_E1y[:, 1], (n, 1))
+    # dE1z_dt = tf.reshape(del_E1z[:, 0], (n, 1))
+    # dE1z_dx = tf.reshape(del_E1z[:, 1], (n, 1))
 
     # G is a Tensor of shape (n, 1).
     G = dE1x_dt - 𝑒/ε0*n0*u1x
@@ -727,28 +724,28 @@ def pde_E1y(X, ψ, del_ψ):
         Value of differential equation at each evaluation point.
     """
     n = X.shape[0]
-    t = tf.reshape(X[:, 0], (n, 1))
-    x = tf.reshape(X[:, 1], (n, 1))
+    # t = tf.reshape(X[:, 0], (n, 1))
+    # x = tf.reshape(X[:, 1], (n, 1))
     (n1, P1, u1x, u1y, u1z, E1x, E1y, E1z) = ψ
     (del_n1, del_P1,
      del_u1x, del_u1y, del_u1z,
      del_E1x, del_E1y, del_E1z) = del_ψ
-    dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
-    dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
-    dP1_dt = tf.reshape(del_P1[:, 0], (n, 1))
-    dP1_dx = tf.reshape(del_P1[:, 1], (n, 1))
-    du1x_dt = tf.reshape(del_u1x[:, 0], (n, 1))
-    du1x_dx = tf.reshape(del_u1x[:, 1], (n, 1))
-    du1y_dt = tf.reshape(del_u1y[:, 0], (n, 1))
-    du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
-    du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
-    du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
-    dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
-    dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
+    # dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
+    # dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
+    # dP1_dt = tf.reshape(del_P1[:, 0], (n, 1))
+    # dP1_dx = tf.reshape(del_P1[:, 1], (n, 1))
+    # du1x_dt = tf.reshape(del_u1x[:, 0], (n, 1))
+    # du1x_dx = tf.reshape(del_u1x[:, 1], (n, 1))
+    # du1y_dt = tf.reshape(del_u1y[:, 0], (n, 1))
+    # du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
+    # du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
+    # du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
+    # dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
+    # dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
     dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
-    dE1y_dx = tf.reshape(del_E1y[:, 1], (n, 1))
-    dE1z_dt = tf.reshape(del_E1z[:, 0], (n, 1))
-    dE1z_dx = tf.reshape(del_E1z[:, 1], (n, 1))
+    # dE1y_dx = tf.reshape(del_E1y[:, 1], (n, 1))
+    # dE1z_dt = tf.reshape(del_E1z[:, 0], (n, 1))
+    # dE1z_dx = tf.reshape(del_E1z[:, 1], (n, 1))
 
     # G is a Tensor of shape (n, 1).
     G = dE1y_dt - 𝑒/ε0*n0*u1y
@@ -778,28 +775,28 @@ def pde_E1z(X, ψ, del_ψ):
         Value of differential equation at each evaluation point.
     """
     n = X.shape[0]
-    t = tf.reshape(X[:, 0], (n, 1))
-    x = tf.reshape(X[:, 1], (n, 1))
+    # t = tf.reshape(X[:, 0], (n, 1))
+    # x = tf.reshape(X[:, 1], (n, 1))
     (n1, P1, u1x, u1y, u1z, E1x, E1y, E1z) = ψ
     (del_n1, del_P1,
      del_u1x, del_u1y, del_u1z,
      del_E1x, del_E1y, del_E1z) = del_ψ
-    dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
-    dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
-    dP1_dt = tf.reshape(del_P1[:, 0], (n, 1))
-    dP1_dx = tf.reshape(del_P1[:, 1], (n, 1))
-    du1x_dt = tf.reshape(del_u1x[:, 0], (n, 1))
-    du1x_dx = tf.reshape(del_u1x[:, 1], (n, 1))
-    du1y_dt = tf.reshape(del_u1y[:, 0], (n, 1))
-    du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
-    du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
-    du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
-    dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
-    dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
-    dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
-    dE1y_dx = tf.reshape(del_E1y[:, 1], (n, 1))
+    # dn1_dt = tf.reshape(del_n1[:, 0], (n, 1))
+    # dn1_dx = tf.reshape(del_n1[:, 1], (n, 1))
+    # dP1_dt = tf.reshape(del_P1[:, 0], (n, 1))
+    # dP1_dx = tf.reshape(del_P1[:, 1], (n, 1))
+    # du1x_dt = tf.reshape(del_u1x[:, 0], (n, 1))
+    # du1x_dx = tf.reshape(del_u1x[:, 1], (n, 1))
+    # du1y_dt = tf.reshape(del_u1y[:, 0], (n, 1))
+    # du1y_dx = tf.reshape(del_u1y[:, 1], (n, 1))
+    # du1z_dt = tf.reshape(del_u1z[:, 0], (n, 1))
+    # du1z_dx = tf.reshape(del_u1z[:, 1], (n, 1))
+    # dE1x_dt = tf.reshape(del_E1x[:, 0], (n, 1))
+    # dE1x_dx = tf.reshape(del_E1x[:, 1], (n, 1))
+    # dE1y_dt = tf.reshape(del_E1y[:, 0], (n, 1))
+    # dE1y_dx = tf.reshape(del_E1y[:, 1], (n, 1))
     dE1z_dt = tf.reshape(del_E1z[:, 0], (n, 1))
-    dE1z_dx = tf.reshape(del_E1z[:, 1], (n, 1))
+    # dE1z_dx = tf.reshape(del_E1z[:, 1], (n, 1))
 
     # G is a Tensor of shape (n, 1).
     G = dE1z_dt - 𝑒/ε0*n0*u1z
