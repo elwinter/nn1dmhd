@@ -49,8 +49,8 @@ bg = np.vstack([X_min, X_max]).T
 # Create the flattened, evenly-spaced grid. The last dimension varies fastest.
 grid = create_training_points_gridded(ng, bg)
 
-# Save the grid to a file.s
-np.savetxt("grid.dat", grid, fmt="%g")
+# Send the grid to standard output.
+np.savetxt(sys.stdout, grid, fmt="%g")
 
 # To determine the number of grid points from the output file:
 # n_x = len(np.unique(grid[:, 0])))
