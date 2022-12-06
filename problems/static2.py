@@ -101,9 +101,9 @@ initial_values = [n0, P0, ux0, uy0, uz0, Bx0, By0, Bz0]
 
 
 def n_analytical(X: np.ndarray):
-    """Compute analytical solution for mass density.
+    """Compute analytical solution for number density.
 
-    Compute anaytical solution for mass density.
+    Compute anaytical solution for number density.
 
     Parameters
     ----------
@@ -113,7 +113,7 @@ def n_analytical(X: np.ndarray):
     Returns
     -------
     n : np.ndarray of float, shape (n,)
-        Analytical values for mass density.
+        Analytical values for number density.
     """
     n = np.full((X.shape[0],), n0)
     return n
@@ -344,9 +344,9 @@ def compute_boundary_conditions(X: np.ndarray):
 
 # @tf.function
 def pde_n(X, Y, del_Y):
-    """Differential equation for mass density.
+    """Differential equation for number density.
 
-    Evaluate the differential equation for mass density. This equation is
+    Evaluate the differential equation for number density. This equation is
     derived from the equation of mass continuity.
 
     Parameters
