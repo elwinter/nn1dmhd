@@ -57,7 +57,7 @@ default_seed = 0
 default_tolerance = 1e-6
 
 # Default normalized weight to apply to the boundary condition loss function.
-default_w_bc = 0.0
+default_w_data = 0.0
 
 
 # Module constants
@@ -174,7 +174,7 @@ def create_command_line_argument_parser(description, default_problem):
         help="Print verbose output (default: %(default)s)."
     )
     parser.add_argument(
-        "-w", "--w_bc", type=float, default=default_w_bc,
+        "-w", "--w_data", type=float, default=default_w_data,
         help="Normalized weight for boundary condition loss function "
              "(default: %(default)s)."
     )
@@ -324,12 +324,10 @@ def save_hyperparameters(args, output_dir):
         f.write("max_epochs = %s\n" % repr(args.max_epochs))
         f.write("H = %s\n" % repr(args.n_hid))
         f.write("n_layers = %s\n" % repr(args.n_layers))
-        f.write("nx_train = %s\n" % repr(args.nx_train))
-        f.write("nx_val = %s\n" % repr(args.nx_val))
         f.write("precision = %s\n" % repr(args.precision))
         f.write("random_seed = %s\n" % repr(args.seed))
         f.write("tolerance = %s\n" % repr(args.tolerance))
-        f.write("w_bc = %s\n" % repr(args.w_bc))
+        f.write("w_data = %s\n" % repr(args.w_data))
         f.write("w0_range = %s\n" % repr(w0_range))
         f.write("u0_range = %s\n" % repr(u0_range))
         f.write("v0_range = %s\n" % repr(v0_range))
