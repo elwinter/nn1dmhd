@@ -291,8 +291,6 @@ def main():
         print("Training started at", t_start)
 
     for epoch in range(max_epochs):
-        if debug:
-            print("Starting epoch %s." % epoch)
 
         # Run the forward pass.
         # tape0 is for computing gradients wrt network parameters.
