@@ -85,26 +85,40 @@ def main():
     seed = args.seed
     verbose = args.verbose
     rest = args.rest
+    if debug:
+        print("args = %s" % args)
     # Fetch the remaining command-line arguments.
     # They should be in sets of 3:
     # x_min x_max n_x y_min y_max n_y ...
     X_min = np.array(rest[::3], dtype=float)
     X_max = np.array(rest[1::3], dtype=float)
     X_n = np.array(rest[2::3], dtype=int)
-    assert(len(X_min) == len(X_max) == len(X_n))
+    if debug:
+        print("X_min = %s" % X_min)
+        print("X_max = %s" % X_max)
+        print("X_n = %s" % X_n)
+    assert len(X_min) == len(X_max) == len(X_n)
 
-    # Assemble the minima and maxima into a combined array of the form:
+    # Assemble the minima and maxima into a combined array of boundaries of
+    # the form:
     # [
     #  [x_min, x_max],
     #  [y_min, y_max],
     #  ...
     # ]
     b = np.vstack([X_min, X_max]).T
+    if debug:
+        print("b = %s" % b)
 
     # Create the training points.
     if random:
+
+        # Seed the random number generator.
+        np.random.seed(seed)
+
         # Select the training points randomly within the domain.
         points = create_training_points_random(X_n, b)
+
     else:
         # Create the flattened, evenly-spaced grid. The last dimension varies
         # fastest.
