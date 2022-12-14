@@ -62,15 +62,58 @@ def create_training_points_gridded(ng: np.ndarray, bg: np.ndarray):
     return Xg
 
 
+def create_training_points_random(nr: np.ndarray, br: np.ndarray):
+    """Create randomly-spaced training points.
+
+    Create a set of training points randomly spaced in n orthogonal dimensions.
+    Flatten the data to a list of of n-dimensional points.
+
+    Parameters
+    ----------
+    nr : np.ndarray of int, shape (n_dim,)
+        Number of randomly-spaceed points along each dimension.
+    br : np.ndarray of float, shape (n_dim, 2)
+        Minimum and maximum (boundary) values for each dimension.
+
+    Returns
+    -------
+    Xr : np.ndarray, shape (np.prod(ng), n_dim)
+        Array of all training points.
+    """
+    # Determine the number of dimensions.
+    n_dim = len(nr)
+
+    # Compute the total number of points to create.
+    Nr = np.prod(nr)
+
+    # Create Nr random points, each with n_dim coordinates.
+    # These points are from the uniform random half-open interval [0, 1).]
+    # Then map these random points to the corresponding ranges defined in br.
+    Xr = np.random.random(size=(Nr, n_dim))*(br[:, 1] - br[:, 0]) + br[:, 0]
+
+    # Return the training points.
+    return Xr
+
+
 if __name__ == '__main__':
+
+    # Gridded training points.
     ng = np.array([2, 3, 4, 5], dtype=int)
     print("ng = %s" % ng)
     bg = np.array([
         [0, 1],
-        [0, 1],
-        [0, 1],
-        [0, 1],
+        [1, 2],
+        [3, 4],
+        [3.5, 5.5],
     ])
     print("bg = %s" % bg)
     Xg = create_training_points_gridded(ng, bg)
     print("Xg = %s" % Xg)
+
+    # Random training points.
+    nr = ng
+    Nr = np.prod(nr)
+    br = bg
+    n_dim = len(br)
+    Xr = create_training_points_random(nr, br)
+    print(Xr)
