@@ -26,13 +26,13 @@ dimensions (independent variables) in the problem. For an ODE, n_dim is 1,
 giving a shape of (n, 1).
 
 Y represents a set of dependent variables at each point in X. This variable is
-also a tf.Tensor, shape (n, n_var), where n_var is the number of dependent
-variables. For an ODE, n_var is 1, giving a shape of (n, 1).
+a list of n_var tf.Tensor, each shape (n, 1), where n_var is the number of dependent
+variables. For an ODE, n_var is 1, giving a list of 1 Tensor of shape of (n, 1).
 
 dY_dX contains the first derivatives of each dependent variable with respect
-to each independent variable, at each point in X. Also a tf.Tensor, the shape
-is therefore (n, n_var, n_dim). For an ODE, n_var and n_dim are 1, for a shape
-of (n, 1, 1).
+to each independent variable, at each point in X. It is a list of n_var tf.Tensor,
+each shape (n, n_dim). For an ODE, n_var and n_dim are 1, for a list of 1 Tensor
+of shape (n, 1).
 
 Author
 ------
@@ -97,29 +97,11 @@ def y_analytical(X):
     return y
 
 
-def Y_analytical(X): 
-    """Analytical solutions for all equations.
-
-    Analytical solutions for all equations.
-
-    Parameters
-    ----------
-    X : tf.Tensor, shape (n, n_dim)
-        Independent variable values for computation.
-
-    Returns
-    -------
-    Y : tf.Tensor, shape (n, n_var)
-        Analytical solution for each variable at each x-value.
-    """
-    n = X.shape[0]
-    y0 = y_analytical(X)
-    Y = [y0]
-    Y = tf.reshape(Y, (n, n_var))
-    return Y
+# Gather the analytical solutions in a list.
+Y_analytical = [y_analytical]
 
 
-def dy_dx_analytical(X):
+def del_y_analytical(X):
     """Analytical 1st derivative to lagaris01.
 
     Analytical 1st derivative of y wrt x for lagaris01.
@@ -131,40 +113,21 @@ def dy_dx_analytical(X):
 
     Returns
     -------
-    dy_dx : tf.Tensor, shape (n, 1)
+    del_y : tf.Tensor, shape (n, 1)
         Analytical derivatives of y wrt x at each x-value.
     """
     n = X.shape[0]
     # x and dy_dx are shape (n,)
     x = X[:, 0]
-    dy_dx = (
+    del_y = (
         2*x - tf.math.exp(-x**2/2)*(1 + x + 4*x**2 + x**4)/(1 + x + x**3)**2
     )
-    dy_dx = tf.reshape(dy_dx, (n, 1))
-    return dy_dx
+    del_y = tf.reshape(del_y, (n, 1))
+    return del_y
 
 
-def dY_dX_analytical(X): 
-    """Analytical derivatives for all variables.
-
-    Analytical derivatives for all variables.
-
-    Parameters
-    ----------
-    X : tf.Tensor, shape (n, n_dim)
-        Independent variable values for computation.
-
-    Returns
-    -------
-    Y : tf.Tensor, shape (n, n_var, n_dim)
-        Analytical derivative for each variable wrt each coordinate at each
-        point.
-    """
-    n = X.shape[0]
-    dy_dx = dy_dx_analytical(X)
-    dY_dX = [dy_dx]
-    dY_dX = tf.reshape(dY_dX, (n, n_var, n_dim))
-    return dY_dX
+# Gather the analytical derivatives in a list of lists.
+del_Y_analytical = [del_y_analytical]
 
 
 def lagaris01(X, Y, dY_dX):
@@ -177,9 +140,9 @@ def lagaris01(X, Y, dY_dX):
     ----------
     X : tf.Tensor, shape (n, n_dim)
         Values of independent variables at each evaluation point.
-    Y : tf.Tensor, each shape (n, n_var)
+    Y : list of n_var tf.Tensor, each shape (n, 1)
         Values of dependent variables at each evaluation point.
-    dY_dX : tf.Tensor, shape (n, n_var, n_dim)
+    dY_dX : list of n_var tf.Tensor, each shape (n, n_dim)
         Values of derivatives of dependent variables wrt independent variables
         at each evaluation point.
 
@@ -190,41 +153,13 @@ def lagaris01(X, Y, dY_dX):
     """
     n = X.shape[0]
     x = tf.reshape(X[:, 0], (n, 1))
-    y = tf.reshape(Y[:, 0], (n, 1))
-    dy_dx = tf.reshape(dY_dX[:, 0, 0], (n, 1))
+    y = tf.reshape(Y[0], (n, 1))
+    dy_dx = tf.reshape(dY_dX[0][:], (n, 1))
     G = (
         dy_dx + (x + (1 + 3*x**2)/(1 + x + x**3))*y - x**3
         - 2*x - x**2*(1 + 3*x**2)/(1 + x + x**3)
     )
     G = tf.reshape(G, (n, 1))
-    return G
-
-
-def evaluate_de(X, Y, dY_dX):
-    """Evaluate each differential equation at each point.
-
-    Evaluate each differential equation at each point.
-
-    Parameters
-    ----------
-    X : tf.Tensor, shape (n, n_dim)
-        Values of independent variables at each evaluation point.
-    Y : tf.Tensor, each shape (n, n_var)
-        Values of dependent variables at each evaluation point.
-    dY_dX : tf.Tensor, shape (n, n_var, n_dim)
-        Values of derivatives of dependent variables wrt independent variables
-        at each evaluation point.
-
-    Returns
-    -------
-    G : tf.Tensor, shape (n, n_eq)
-        Value of each differential equation at each evaluation point.
-    """
-    n = X.shape[0]
-    n_eq = n_var
-    g0 = lagaris01(X, Y, dY_dX)
-    G = [g0]
-    G = tf.reshape(G, (n, n_eq))
     return G
 
 
@@ -242,9 +177,10 @@ if __name__ == "__main__":
     n_x = 5
     X = tf.reshape(np.linspace(x0, x1, n_x), (n_x, n_dim))
     print("X = %s" % X)
-    Y = Y_analytical(X)
+    Y = [f(X) for f in Y_analytical]
     print("Y = %s" % Y)
-    dY_dX = dY_dX_analytical(X)
-    print("dY_dX = %s" % dY_dX)
-    G = evaluate_de(X, Y, dY_dX)
+    del_Y = [f(X) for f in del_Y_analytical]
+    print("del_Y = %s" % del_Y)
+    # Since X, Y, del_Y are all analytical, all G should be ~0.
+    G = lagaris01(X, Y, del_Y)
     print("G = %s" % G)
