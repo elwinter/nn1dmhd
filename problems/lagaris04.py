@@ -64,7 +64,6 @@ dependent_variable_labels = ["$y_1$", "$y_2$"]
 n_var = len(dependent_variable_names)
 
 
-# Define the initial condition.
 # Define the problem domain.
 x0 = 0.0
 x1 = 1.0
