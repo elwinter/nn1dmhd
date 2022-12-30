@@ -128,6 +128,7 @@ def dy_dx_analytical(X):
 # Gather the analytical derivatives in a list of lists.
 dY_dX_analytical = [dy_dx_analytical]
 
+
 def lagaris02(X, Y, dY_dX):
     """1st-order ODE (Example 2 from Lagaris et al (1998)).
 

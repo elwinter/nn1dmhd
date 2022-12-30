@@ -384,7 +384,6 @@ def main():
             # Tensor shape () (scalar).
             L = tf.math.reduce_sum(Lm)
 
-
         # Save the current losses.
         # The per-model loss histories are lists of lists of Tensors.
         # The top-level list has length n_epochs.
