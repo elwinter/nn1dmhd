@@ -264,19 +264,19 @@ def main():
     if debug:
         print("optimizer = %s" % optimizer)
 
-    # # Create history variables.
-    # # Loss for each model for equation residuals.
-    # losses_model_res = []
-    # # Loss for each model for data points.
-    # losses_model_data = []
-    # # Total loss for each model.
-    # losses_model = []
-    # # Total loss for all models for equation residuals.
-    # losses_res = []
-    # # Total loss for all models for data points.
-    # losses_data = []
-    # # Total loss for all models.
-    # losses = []
+    # Create history variables.
+    # Loss for each model for equation residuals.
+    losses_model_res = []
+    # Loss for each model for data points.
+    losses_model_data = []
+    # Total loss for each model.
+    losses_model = []
+    # Total loss for all models for equation residuals.
+    losses_res = []
+    # Total loss for all models for data points.
+    losses_data = []
+    # Total loss for all models.
+    losses = []
 
     # Set the random number seed for reproducibility.
     tf.random.set_seed(seed)
@@ -385,36 +385,36 @@ def main():
             L = tf.math.reduce_sum(Lm)
 
 
-    #     # Save the current losses.
-    #     # The per-model loss histories are lists of lists of Tensors.
-    #     # The top-level list has length n_epochs.
-    #     # Each sub-list has length p.n_var.
-    #     # Each Tensor is shape () (scalar).
-    #     losses_model_res.append(Lm_train)
-    #     losses_model_data.append(Lm_data)
-    #     losses_model.append(Lm)
-    #     # The total loss histories are lists of scalars.
-    #     losses_res.append(L_train.numpy())
-    #     losses_data.append(L_data.numpy())
-    #     losses.append(L.numpy())
+        # Save the current losses.
+        # The per-model loss histories are lists of lists of Tensors.
+        # The top-level list has length n_epochs.
+        # Each sub-list has length p.n_var.
+        # Each Tensor is shape () (scalar).
+        losses_model_res.append(Lm_res_train)
+        losses_model_data.append(Lm_data)
+        losses_model.append(Lm)
+        # The total loss histories are lists of scalars.
+        losses_res.append(L_res.numpy())
+        losses_data.append(L_data.numpy())
+        losses.append(L.numpy())
 
-    #     # Save the current model weights.
-    #     if save_weights:
-    #         for (i, model) in enumerate(models):
-    #             model.save_weights(
-    #                 os.path.join(
-    #                     output_dir, "weights_" + p.dependent_variable_names[i],
-    #                     "weights_%06d" % epoch
-    #                 )
-    #             )
+        # Save the current model weights.
+        if save_weights:
+            for (i, model) in enumerate(models):
+                model.save_weights(
+                    os.path.join(
+                        output_dir, "weights_" + p.dependent_variable_names[i],
+                        "weights_%06d" % epoch
+                    )
+                )
 
-    #     # Check for convergence.
-    #     if convcheck:
-    #         if epoch > 1:
-    #             loss_delta = losses[-1] - losses[-2]
-    #             if abs(loss_delta) <= tol:
-    #                 converged = True
-    #                 break
+        # Check for convergence.
+        if convcheck:
+            if epoch > 1:
+                loss_delta = losses[-1] - losses[-2]
+                if abs(loss_delta) <= tol:
+                    converged = True
+                    break
 
         # Compute the gradient of the loss function wrt the network parameters.
         # pgrad is a list of lists of Tensor objects.
@@ -452,46 +452,46 @@ def main():
         print("Final value of loss function: %f" % L)
         print("converged = %s" % converged)
 
-    # # Convert the loss function histories to numpy arrays.
-    # losses_model_res = np.array(losses_model_res)
-    # losses_model_data = np.array(losses_model_data)
-    # losses_model = np.array(losses_model)
-    # losses_res = np.array(losses_res)
-    # losses_data = np.array(losses_data)
-    # losses = np.array(losses)
+    # Convert the loss function histories to numpy arrays.
+    losses_model_res = np.array(losses_model_res)
+    losses_model_data = np.array(losses_model_data)
+    losses_model = np.array(losses_model)
+    losses_res = np.array(losses_res)
+    losses_data = np.array(losses_data)
+    losses = np.array(losses)
 
-    # # Save the loss function histories.
-    # if verbose:
-    #     print("Saving loss function histories.")
-    # np.savetxt(os.path.join(output_dir, 'losses_model_res.dat'),
-    #            losses_model_res)
-    # np.savetxt(os.path.join(output_dir, 'losses_model_data.dat'),
-    #            losses_model_data)
-    # np.savetxt(os.path.join(output_dir, 'losses_model.dat'), losses_model)
-    # np.savetxt(os.path.join(output_dir, 'losses_res.dat'), losses_res)
-    # np.savetxt(os.path.join(output_dir, 'losses_data.dat'), losses_data)
-    # np.savetxt(os.path.join(output_dir, 'losses.dat'), losses)
+    # Save the loss function histories.
+    if verbose:
+        print("Saving loss function histories.")
+    np.savetxt(os.path.join(output_dir, 'losses_model_res.dat'),
+               losses_model_res)
+    np.savetxt(os.path.join(output_dir, 'losses_model_data.dat'),
+               losses_model_data)
+    np.savetxt(os.path.join(output_dir, 'losses_model.dat'), losses_model)
+    np.savetxt(os.path.join(output_dir, 'losses_res.dat'), losses_res)
+    np.savetxt(os.path.join(output_dir, 'losses_data.dat'), losses_data)
+    np.savetxt(os.path.join(output_dir, 'losses.dat'), losses)
 
-    # # Compute and save the trained results at training points.
-    # if verbose:
-    #     print("Computing and saving trained results.")
-    # # Shapes are (n_train, 1)
-    # with tf.GradientTape(persistent=True) as tape1:
-    #     N_train = [model(X) for model in models]
-    # # Shapes are (n_train, n_dim)
-    # del_N_train = [tape1.gradient(N, X) for N in N_train]
-    # for i in range(p.n_var):
-    #     np.savetxt(os.path.join(output_dir, "%s_train.dat" %
-    #                p.dependent_variable_names[i]),
-    #                tf.reshape(N_train[i], (n_train,)))
-    #     np.savetxt(os.path.join(output_dir, "del_%s_train.dat" %
-    #                p.dependent_variable_names[i]), del_N_train[i])
+    # Compute and save the trained results at training points.
+    if verbose:
+        print("Computing and saving trained results.")
+    # Shapes are (n_train, 1)
+    with tf.GradientTape(persistent=True) as tape1:
+        Y_train = [model(X_train) for model in models]
+    # Shapes are (n_train, n_dim)
+    dY_dX_train = [tape1.gradient(Y, X_train) for Y in Y_train]
+    for i in range(p.n_var):
+        np.savetxt(os.path.join(output_dir, "%s_train.dat" %
+                   p.dependent_variable_names[i]),
+                   tf.reshape(Y_train[i], (n_train,)))
+        np.savetxt(os.path.join(output_dir, "del_%s_train.dat" %
+                   p.dependent_variable_names[i]), dY_dX_train[i])
 
-    # # Save the trained models.
-    # if save_model:
-    #     for (i, model) in enumerate(models):
-    #         model.save(os.path.join(output_dir, "model_" +
-    #                    p.dependent_variable_names[i]))
+    # Save the trained models.
+    if save_model:
+        for (i, model) in enumerate(models):
+            model.save(os.path.join(output_dir, "model_" +
+                       p.dependent_variable_names[i]))
 
 
 if __name__ == "__main__":
