@@ -37,7 +37,6 @@ Eric Winter (eric.winter62@gmail.com)
 # Import standard modules.
 
 # Import supplemental modules.
-import numpy as np
 import tensorflow as tf
 
 # Import project modules.
@@ -71,9 +70,10 @@ t0 = 0.0
 t1 = 1.0
 x0 = 0.0
 x1 = 1.0
-domain = np.array(
+domain = tf.reshape(
     [[t0, t1],
-     [x0, x1]]
+     [x0, x1]],
+    (n_dim, 2)
 )
 
 # Adiabatic index = (N + 2)/N, N = # DOF = 1.
@@ -95,152 +95,152 @@ Bz0 = 0.0
 initial_values = [n0, P0, ux0, uy0, uz0, Bx0, By0, Bz0]
 
 
-def n_analytical(X: np.ndarray):
+def n_analytical(X):
     """Compute analytical solution for number density.
 
     Compute anaytical solution for number density.
 
     Parameters
     ----------
-    X : np.ndarray of float, shape (n, n_dim)
+    X : tf.Tensor, shape (n, n_dim)
         Independent variable values for computation.
 
     Returns
     -------
-    n : np.ndarray of float, shape (n,)
+    n : tf.Tensor, shape (n,)
         Analytical values for number density.
     """
     n = np.full((X.shape[0],), n0)
     return n
 
 
-def P_analytical(X: np.ndarray):
+def P_analytical(X):
     """Compute analytical solution for pressure.
 
     Compute anaytical solution for pressure.
 
     Parameters
     ----------
-    X : np.ndarray of float, shape (n, n_dim)
+    X : tf.Tensor, shape (n, n_dim)
         Independent variable values for computation.
 
     Returns
     -------
-    P : np.ndarray of float, shape (n,)
+    P : tf.Tensor, shape (n,)
         Analytical values for pressure.
     """
     P = np.full((X.shape[0],), P0)
     return P
 
 
-def ux_analytical(X: np.ndarray):
+def ux_analytical(X):
     """Compute analytical solution for x-velocity.
 
     Compute anaytical solution for x-velocity.
 
     Parameters
     ----------
-    X : np.ndarray of float, shape (n, n_dim)
+    X : tf.Tensor, shape (n, n_dim)
         Independent variable values for computation.
 
     Returns
     -------
-    ux : np.ndarray of float, shape (n,)
+    ux : tf.Tensor, shape (n,)
         Analytical values for x-velocity.
     """
     ux = np.full((X.shape[0],), ux0)
     return ux
 
 
-def uy_analytical(X: np.ndarray):
+def uy_analytical(X):
     """Compute analytical solution for y-velocity.
 
     Compute anaytical solution for y-velocity.
 
     Parameters
     ----------
-    X : np.ndarray of float, shape (n, n_dim)
+    X : tf.Tensor, shape (n, n_dim)
         Independent variable values for computation.
 
     Returns
     -------
-    uy : np.ndarray of float, shape (n,)
+    uy : tf.Tensor, shape (n,)
         Analytical values for y-velocity.
     """
     uy = np.full((X.shape[0],), uy0)
     return uy
 
 
-def uz_analytical(X: np.ndarray):
+def uz_analytical(X):
     """Compute analytical solution for z-velocity.
 
     Compute anaytical solution for z-velocity.
 
     Parameters
     ----------
-    X : np.ndarray of float, shape (n, n_dim)
+    X : tf.Tensor, shape (n, n_dim)
         Independent variable values for computation.
 
     Returns
     -------
-    uz : np.ndarray of float, shape (n,)
+    uz : tf.Tensor, shape (n,)
         Analytical values for z-velocity.
     """
     uz = np.full((X.shape[0],), uz0)
     return uz
 
 
-def Bx_analytical(X: np.ndarray):
+def Bx_analytical(X):
     """Compute analytical solution for x-magnetic field.
 
     Compute anaytical solution for x-magnetic field.
 
     Parameters
     ----------
-    X : np.ndarray of float, shape (n, n_dim)
+    X : tf.Tensor, shape (n, n_dim)
         Independent variable values for computation.
 
     Returns
     -------
-    Bx : np.ndarray of float, shape (n,)
+    Bx : tf.Tensor, shape (n,)
         Analytical values for x-magnetic field.
     """
     Bx = np.full((X.shape[0],), Bx0)
     return Bx
 
 
-def By_analytical(X: np.ndarray):
+def By_analytical(X):
     """Compute analytical solution for y-magnetic field.
 
     Compute anaytical solution for y-magnetic field.
 
     Parameters
     ----------
-    X : np.ndarray of float, shape (n, n_dim)
+    X : tf.Tensor, shape (n, n_dim)
         Independent variable values for computation.
 
     Returns
     -------
-    By : np.ndarray of float, shape (n,)
+    By : tf.Tensor, shape (n,)
         Analytical values for y-magnetic field.
     """
     By = np.full((X.shape[0],), By0)
     return By
 
 
-def Bz_analytical(X: np.ndarray):
+def Bz_analytical(X):
     """Compute analytical solution for z-magnetic field.
 
     Compute anaytical solution for z-magnetic field.
 
     Parameters
     ----------
-    X : np.ndarray of float, shape (n, n_dim)
+    X : tf.Tensor, shape (n, n_dim)
         Independent variable values for computation.
 
     Returns
     -------
-    Bz : np.ndarray of float, shape (n,)
+    Bz : tf.Tensor, shape (n,)
         Analytical values for z-magnetic field.
     """
     Bz = np.full((X.shape[0],), Bz0)
@@ -685,13 +685,3 @@ if __name__ == "__main__":
     print("Bx0 = %s" % Bx0)
     print("By0 = %s" % By0)
     print("Bz0 = %s" % Bz0)
-
-    nt = 3
-    nx = 4
-    Xg, Xg_in, Xg_bc = create_training_data_gridded(nt, nx)
-    print("Xg = %s" % Xg)
-    print("Xg_in = %s" % Xg_in)
-    print("Xg_bc = %s" % Xg_bc)
-
-    bc = compute_boundary_conditions(Xg_bc)
-    print("bc = %s" % bc)

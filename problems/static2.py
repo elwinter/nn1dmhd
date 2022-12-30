@@ -75,10 +75,11 @@ x0 = 0.0
 x1 = 1.0
 y0 = 0.0
 y1 = 1.0
-domain = np.array(
+domain = tf.reshape(
     [[t0, t1],
      [x0, x1],
-     [y0, y1]]
+     [y0, y1]],
+    (n_dim, 2)
 )
 
 # Adiabatic index = (N + 2)/N, N = # DOF.
@@ -263,83 +264,6 @@ Y_analytical = [
     By_analytical,
     Bz_analytical,
 ]
-
-
-def create_training_data_gridded(nt: int, nx: int, ny: int):
-    """Create the training data on an evenly-spaced grid.
-
-    Create and return a set of training points evenly spaced in x, y, and
-    t. Flatten the data to a list of points. Also return copies of the data
-    containing only internal points, and only boundary points.
-
-    Boundary points occur where:
-
-    t = t0|t1 OR x = x0|x1 OR y = y0|y1
-
-    Parameters
-    ----------
-    nt, nx, ny : int
-        Number of points in t-, x-, and y-dimensions.
-
-    Returns
-    -------
-    Xg : np.ndarray, shape (nt*nx*ny, n_dim)
-        Array of all training points.
-    Xg_in : np.ndarray, shape (n_in, n_dim)
-        Array of all training points within the boundary.
-    Xg_bc : np.ndarray, shape (n_bc, n_dim)
-        Array of all training points on the boundary.
-    """
-    # Create the training grid and mask.
-    ng = [nt, nx, ny]
-    ng_total = np.prod(ng)
-    Xg = create_training_points_gridded(ng, domain)
-    mask = np.ones(ng_total, dtype=bool)
-
-    # Compute the coordinates of each training point, and in-domain mask value.
-    for (i, (t, x, y)) in enumerate(Xg):
-        if (np.isclose(t, t0) or np.isclose(t, t1) or
-            np.isclose(x, x0) or np.isclose(x, x1) or
-            np.isclose(y, y0) or np.isclose(y, x1)):
-            # This is a boundary point - mask it out.
-            mask[i] = False
-
-    # Flatten the mask.
-    mask.shape = (ng_total,)
-
-    # Extract the internal points.
-    Xg_in = Xg[mask]
-
-    # Invert the mask and extract the boundary points.
-    mask = np.logical_not(mask)
-    Xg_bc = Xg[mask]
-
-    # Return the complete, inner, and boundary training points.
-    return Xg, Xg_in, Xg_bc
-
-
-def compute_boundary_conditions(X: np.ndarray):
-    """Compute the boundary conditions.
-
-    The boundary conditions are computed using the analytical solutions at the
-    specified points. Note that this can be used to compute synthetic data
-    values within the domain.
-
-    Parameters
-    ----------
-    X : np.ndarray of float, shape (n_bc, n_dim)
-        Independent variable values for computation.
-
-    Returns
-    -------
-    bc : np.ndarray of float, shape (n_bc, n_var)
-        Values of each dependent variable at X.
-    """
-    n = len(X)
-    bc = np.empty((n, n_var))
-    for (i, Ya) in enumerate(Y_analytical):
-        bc[:, i] = Ya(X)
-    return bc
 
 
 # @tf.function
@@ -816,7 +740,7 @@ def pde_Bz(X, Y, del_Y):
 
 
 # Make a list of all of the differential equations.
-differential_equations = [
+de = [
     pde_n,
     pde_P,
     pde_ux,
