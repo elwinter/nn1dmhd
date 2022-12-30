@@ -260,7 +260,7 @@ def main():
     # Create the optimizer.
     if verbose:
         print("Creating optimizer.")
-    optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
+    optimizer = tf.keras.optimizers.legacy.Adam(learning_rate=learning_rate)
     if debug:
         print("optimizer = %s" % optimizer)
 
