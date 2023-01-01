@@ -20,25 +20,25 @@ data_points_path = sys.argv[2]
 
 # Read the training points into a 2-D array.
 training_points = np.loadtxt(training_points_path)
-print(training_points)
 
 # Read the data points.
 data_points = np.loadtxt(data_points_path)
 # If only 1 point, put it in a 2-D array of 1 row, 2 + n_var columns.
 if len(data_points.shape) == 1:
     data_points = data_points.reshape(1, -1)
-print(data_points)
 
 # Extract only the coordinates of the training data.
 data_points = data_points[:, :2]
-print(data_points)
 
 # Create plots in-memory.
 mpl.use("AGG")
 
 # Plot the training points on a line, then the data points.
-plt.figure()
-plt.scatter(training_points[:, 0], training_points[:, 1], s=60, c='r')
-plt.scatter(data_points[:, 0], data_points[:, 1], s=20, c='g')
-plt.grid()
-plt.savefig("train2D.png")
+fig = plt.figure()
+ax = fig.add_subplot()
+ax.scatter(training_points[:, 0], training_points[:, 1], s=60, c='r')
+ax.scatter(data_points[:, 0], data_points[:, 1], s=20, c='g')
+ax.grid()
+ax.set_xlabel('t')
+ax.set_ylabel('x')
+fig.savefig("train2D.png")
