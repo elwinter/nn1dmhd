@@ -24,9 +24,9 @@ R0 = 0.3
 u0 = 1.0
 Bz0 = 0.0
 uz0 = 0.0
-nt = 10
-nx = 10
-ny = 10
+nt = 100
+nx = 100
+ny = 100
 
 # Compute the domain limits.
 t_min = 0.0
