@@ -190,7 +190,7 @@ def main():
     # Import the problem to solve.
     if verbose:
         print("Importing module for problem '%s'." % problem_path)
-    problem_name = os.path.split(problem_path)[-1].strip(".py")
+    problem_name = os.path.splitext(os.path.split(problem_path)[-1])[-2]
     spec = importlib.util.spec_from_file_location(problem_name, problem_path)
     p = importlib.util.module_from_spec(spec)
     sys.modules[problem_name] = p
