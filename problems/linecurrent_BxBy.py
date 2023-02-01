@@ -1,7 +1,8 @@
 """Problem definition file for a simple 2-D MHD problem.
 
-This problem definition file describes the 2-D field loop convection problem
-which is part of the Athena MHD test suite. Details are available at:
+This problem definition file describes the 2-D line current convection
+problem, which is based on the loop2d example in the Athena MHD test suite.
+Details are available at:
 
 https://www.astro.princeton.edu/~jstone/Athena/tests/field-loop/Field-loop.html
 
@@ -31,6 +32,9 @@ From the description on that web page:
     and movie below) -- if anything this makes the test harder. A different
     vector potential which gives smooth currents could be adopted for
     convergence tests.
+
+NOTE: This case deals only with a line current in the +z direction (out of
+the screen). +x is to the right, +y is up.
 
 NOTE: This version of the code solves *only* the equations for Bx and By. All
 other PDEs automatically return 0.
@@ -224,3 +228,8 @@ if __name__ == "__main__":
     print("μ0 = %s" % μ0)
     print("m = %s" % m)
     print("ɣ = %s" % ɣ)
+
+    print("Q = %s" % Q)
+    print("u0 = %s" % u0)
+    print("ux = %s" % ux)
+    print("uy = %s" % uy)
