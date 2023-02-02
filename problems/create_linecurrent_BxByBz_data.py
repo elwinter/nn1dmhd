@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Compute initial conditions for linecurrent_BxBy.
+"""Compute initial conditions for linecurrent_BxByBz.
 
 Author
 ------
