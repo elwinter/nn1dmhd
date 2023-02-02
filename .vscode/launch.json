@@ -25,9 +25,9 @@
                 // "--debug",
                 // "--data=problems/static3_data.dat",
                 // "--learning_rate", "0.01",
-                // "--max_epochs", "1000",
-                // "--n_hid", "10",
-                // "--n_layers", "1",
+                "--max_epochs", "1000",
+                "--n_hid", "100",
+                "--n_layers", "4",
                 // "--precision", "float32",
                 // "--save_model",
                 // "--save_weights",
@@ -37,9 +37,9 @@
                 "--w_data", "0.95",
                 // "/Users/winteel1/research_local/src/nn1dmhd/problems/static3.py",
                 // "problems/static3_grid.dat",
-                "--data", "/Users/winteel1/research_local/src/nn1dmhd/loop2d_data.dat",
-                "/Users/winteel1/research_local/src/nn1dmhd/problems/loop2d.py",
-                "/Users/winteel1/research_local/src/nn1dmhd/loop2d_grid.dat",
+                "--data", "/Users/winteel1/research_local/src/nn1dmhd/linecurrent_BxBy_data.dat",
+                "/Users/winteel1/research_local/src/nn1dmhd/problems/linecurrent_BxBy.py",
+                "/Users/winteel1/research_local/src/nn1dmhd/linecurrent_BxBy_grid.dat",
             ]
         }
     ]
