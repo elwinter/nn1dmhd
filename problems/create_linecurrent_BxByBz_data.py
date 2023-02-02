@@ -18,9 +18,9 @@ mu0 = 1.0
 I = 1.0
 Q = 60.0
 u0 = 1.0
-nt = 10
-nx = 10
-ny = 10
+nt = 100
+nx = 100
+ny = 100
 
 # Compute the domain limits.
 t_min = 0.0
@@ -54,4 +54,5 @@ for (i, x) in enumerate(xg):
         r = np.sqrt(x**2 + y**2)
         Bx = -mu0*I/(2*np.pi)*y/r**2
         By = mu0*I/(2*np.pi)*x/r**2
-        print(tg[0], x, y, Bx, By)
+        Bz = 0.0
+        print(tg[0], x, y, Bx, By, Bz)
