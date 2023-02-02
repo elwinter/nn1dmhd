@@ -29,7 +29,7 @@ dependent variables:
 
     0: Bx (x-component of magnetic field)
     1: By (y-component of magnetic field)
-    1: Bz (z-component of magnetic field)
+    2: Bz (z-component of magnetic field)
 
 Author
 ------
