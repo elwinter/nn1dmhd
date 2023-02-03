@@ -14,13 +14,13 @@
             "justMyCode": true,
             "args": [
                 "--max_epochs", "1000",
-                "--n_hid", "100",
+                "--n_hid", "10",
                 "--n_layers", "4",
                 "--verbose",
                 "--w_data", "0.95",
-                "--data", "/Users/winteel1/research_local/src/nn1dmhd/problems/linecurrent_BxByBz_data.dat",
-                "/Users/winteel1/research_local/src/nn1dmhd/problems/linecurrent_BxByBz.py",
-                "/Users/winteel1/research_local/src/nn1dmhd/problems/linecurrent_BxByBz_grid.dat",
+                "--data", "/Users/winteel1/research_local/src/nn1dmhd/problems/linecurrent_nPBxByBz_data.dat",
+                "/Users/winteel1/research_local/src/nn1dmhd/problems/linecurrent_nPBxByBz.py",
+                "/Users/winteel1/research_local/src/nn1dmhd/problems/linecurrent_nPBxByBz_grid.dat",
             ]
         }
     ]
