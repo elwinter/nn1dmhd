@@ -18,9 +18,9 @@ mu0 = 1.0
 I = 1.0
 Q = 60.0
 u0 = 1.0
-nt = 100
-nx = 100
-ny = 100
+nt = 50
+nx = 50
+ny = 50
 
 # Compute the domain limits.
 t_min = 0.0
