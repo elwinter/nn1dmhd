@@ -52,8 +52,7 @@ uy = u0*np.cos(np.radians(Q))
 for (i, x) in enumerate(xg):
     for (j, y) in enumerate(yg):
         r = np.sqrt(x**2 + y**2)
-        n = 1.0
         Bx = -mu0*I/(2*np.pi)*y/r**2
         By = mu0*I/(2*np.pi)*x/r**2
         Bz = 0.0
-        print(tg[0], x, y, n, Bx, By, Bz)
+        print(tg[0], x, y, Bx, By, Bz)
