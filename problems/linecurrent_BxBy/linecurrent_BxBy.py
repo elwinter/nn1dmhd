@@ -72,19 +72,19 @@ uy = u0*np.cos(np.radians(Q))
 
 # NOTE: In the functions defined below for the differential equations, the
 # arguments can be unpacked as follows:
-def pde_XXX(X, Y, del_Y):
-    nX = X.shape[0]
-    t = tf.reshape(X[:, 0], (nX, 1))
-    x = tf.reshape(X[:, 1], (nX, 1))
-    y = tf.reshape(X[:, 2], (nX, 1))
-    (Bx, By) = Y
-    (del_Bx, del_By) = del_Y
-    dBx_dt = tf.reshape(del_Bx[:, 0], (nX, 1))
-    dBx_dx = tf.reshape(del_Bx[:, 1], (nX, 1))
-    dBx_dy = tf.reshape(del_Bx[:, 2], (nX, 1))
-    dBy_dt = tf.reshape(del_By[:, 0], (nX, 1))
-    dBy_dx = tf.reshape(del_By[:, 1], (nX, 1))
-    dBy_dy = tf.reshape(del_By[:, 2], (nX, 1))
+# def pde_XXX(X, Y, del_Y):
+#     nX = X.shape[0]
+#     t = tf.reshape(X[:, 0], (nX, 1))
+#     x = tf.reshape(X[:, 1], (nX, 1))
+#     y = tf.reshape(X[:, 2], (nX, 1))
+#     (Bx, By) = Y
+#     (del_Bx, del_By) = del_Y
+#     dBx_dt = tf.reshape(del_Bx[:, 0], (nX, 1))
+#     dBx_dx = tf.reshape(del_Bx[:, 1], (nX, 1))
+#     dBx_dy = tf.reshape(del_Bx[:, 2], (nX, 1))
+#     dBy_dt = tf.reshape(del_By[:, 0], (nX, 1))
+#     dBy_dx = tf.reshape(del_By[:, 1], (nX, 1))
+#     dBy_dy = tf.reshape(del_By[:, 2], (nX, 1))
 
 
 # @tf.function
