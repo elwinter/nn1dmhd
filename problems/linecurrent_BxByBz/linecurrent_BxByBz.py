@@ -6,10 +6,10 @@ Details are available at:
 
 https://www.astro.princeton.edu/~jstone/Athena/tests/field-loop/Field-loop.html
 
-This case deals only with a line current in the +z direction (out of the
-screen). +x is to the right, +y is up.
+NOTE: This case deals only with a line current in the +z direction (out of
+the screen). +x is to the right, +y is up.
 
-NOTE: This version of the code solves *only* the equations for Bx and By.
+NOTE: This version of the code solves *only* the equations for Bx, By, and Bz.
 
 NOTE: The functions in this module are defined using a combination of Numpy and
 TensorFlow operations, so they can be used efficiently by the TensorFlow
