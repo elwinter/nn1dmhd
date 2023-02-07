@@ -71,9 +71,7 @@ def plot_BxBy_quiver(x, y, Bx, By, ax, title="Magnetic field"):
     ax.quiver(x, y, Bx, By)
     ax.set_aspect(1.0)
     ax.set_xlabel("$x$")
-    # ax.set_xticks(XY_x_tick_pos, XY_x_tick_labels)
     ax.set_ylabel("$y$")
-    # ax.set_yticks(XY_y_tick_pos, XY_y_tick_labels)
     ax.grid()
     ax.set_title(title)
 
@@ -100,8 +98,6 @@ def plot_logarithmic_heatmap(z, ax, title="Heat map"):
     """
     sns.heatmap(z, ax=ax, norm=mpl.colors.LogNorm(), square=True)
     ax.set_xlabel("$x$")
-    # ax.set_xticks(heatmap_x_tick_pos, heatmap_x_tick_labels, rotation=0)
     ax.set_ylabel("$y$")
-    # ax.set_yticks(heatmap_y_tick_pos, heatmap_y_tick_labels)
     ax.grid()
     ax.set_title(title)
