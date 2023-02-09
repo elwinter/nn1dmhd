@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Compute initial conditions for loop2D_BxBy.
+"""Compute initial conditions for loop2d_BxBy.
 
 Author
 ------
@@ -8,57 +8,137 @@ eric.winter62@gmail.com
 """
 
 
-import sys
+# Import standard Python modules.
+import argparse
 
+# Import supplemental Python modules.
 import numpy as np
 
+# Import project Python modules.
+
+
+# Program constants
+
+# Program description.
+description = "Compute data for loop2d_BxBy problem."
+
+# Default random number generator seed.
+default_seed = 0
 
 # Constants
-Q = 60.0
-gamma = 5/3
-rho0 = 1.0
-n0 = 1.0
-P0 = 1.0
-A = 1e-3
-R0 = 0.3
-u0 = 1.0
-Bz0 = 0.0
-uz0 = 0.0
-nt = 10
-nx = 20
-ny = 20
+mu0 = 1.0  # Normalized vacuum permittivity.
+I = 1.0    # Normalized current.
+Q = 60.0   # Flow angle in degrees clockwise from +y axis.
+u0 = 1.0   # Initial flow speed.
+A = 1      # Magnitude of magnetic vector potential.
+R0 = 0.3   # Radius of current cylinder.
 
-# Compute the domain limits.
-t_min = 0.0
-t_max = 1.0
-x_min = -1.0
-x_max = 1.0
-y_min = -1/(2*np.cos(np.radians(90 - Q)))
-y_max =  1/(2*np.cos(np.radians(90 - Q)))
-# print("x_min, x_max = %s, %s" % (x_min, x_max))
-# print("y_min, y_max = %s, %s" % (y_min, y_max))
+# Compute the constant velocity components.
+ux = u0*np.sin(np.radians(Q))
+uy = u0*np.cos(np.radians(Q))
 
-# Compute the grid locations in each dimension.
-tg = np.linspace(t_min, t_max, nt)
-xg = np.linspace(x_min, x_max, nx)
-yg = np.linspace(y_min, y_max, ny)
 
-# Compute the initial conditions at spatial grid locations.
-# Each line is:
-# t x y n P ux uy uz Bx By Bz
-for (i, x) in enumerate(xg):
-    for (j, y) in enumerate(yg):
-        n = n0
-        P = P0
-        ux = u0*np.sin(np.radians(Q))
-        uy = u0*np.cos(np.radians(Q))
-        uz = uz0
-        r = np.sqrt(x**2 + y**2)
-        if r < R0:
-            Bx = -A*y/r
-            By =  A*x/r
-        else:
-            Bx = 0.0
-            By = 0.0
-        Bz = Bz0
-        print(tg[0], x, y, Bx, By)
+def create_command_line_argument_parser():
+    """Create the command-line argument parser.
+
+    Create the command-line argument parser.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    parser : argparse.ArgumentParser
+        Parser for command-line arguments.
+    """
+    parser = argparse.ArgumentParser(description)
+    parser.add_argument(
+        "-d", "--debug", action="store_true",
+        help="Print debugging output (default: %(default)s)."
+    )
+    parser.add_argument(
+        "-r", "--random", action="store_true",
+        help="Select points randomly within domain (default: %(default)s)."
+    )
+    parser.add_argument(
+        "--seed", type=int, default=default_seed,
+        help="Seed for random number generator (default: %(default)s)"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true",
+        help="Print verbose output (default: %(default)s)."
+    )
+    parser.add_argument('rest', nargs=argparse.REMAINDER)
+    return parser
+
+
+def main():
+    """Begin main program."""
+
+    # Set up the command-line parser.
+    parser = create_command_line_argument_parser()
+
+    # Parse the command-line arguments.
+    args = parser.parse_args()
+    debug = args.debug
+    random = args.random
+    seed = args.seed
+    verbose = args.verbose
+    rest = args.rest
+    if debug:
+        print("args = %s" % args)
+
+    # Fetch the remaining command-line arguments.
+    # They should be in 3 sets of 3:
+    # t_min t_max n_t x_min x_max n_x y_min y_max n_y
+    assert len(rest) == 9
+    X_min = np.array(rest[::3], dtype=float)
+    X_max = np.array(rest[1::3], dtype=float)
+    X_n = np.array(rest[2::3], dtype=int)
+    if debug:
+        print("X_min = %s" % X_min)
+        print("X_max = %s" % X_max)
+        print("X_n = %s" % X_n)
+    assert len(X_min) == len(X_max) == len(X_n)
+
+    # Extract limits for convenience.
+    (t_min, x_min, y_min) = X_min
+    (t_max, x_max, y_max) = X_max
+    (n_t, n_x, n_y) = X_n
+    if debug:
+        print("%s <= t <= %s" % (t_min, t_max))
+        print("%s <= x <= %s" % (x_min, x_max))
+        print("%s <= y <= %s" % (y_min, y_max))
+
+    # Create the (x, y) coordinate points for the initial conditions.
+    # Points are either random or gridded.
+    if random:
+        np.random.seed(seed)
+        xg = x_min + np.random.random_sample((n_x,))*(x_max - x_min)
+        yg = y_min + np.random.random_sample((n_y,))*(y_max - y_min)
+    else:
+        xg = np.linspace(x_min, x_max, n_x)
+        yg = np.linspace(y_min, y_max, n_y)
+    if debug:
+        print("xg = %s" % xg)
+        print("yg = %s" % yg)
+
+    # Compute the initial conditions at spatial locations.
+    # Each line is:
+    # t_min x y Bx By
+    for (i, x) in enumerate(xg):
+        for (j, y) in enumerate(yg):
+            r = np.sqrt(x**2 + y**2)
+            if r < R0:
+                Bx = -A*y/r
+                By =  A*x/r
+            else:
+                Bx = 0.0
+                By = 0.0
+            print(t_min, x, y, Bx, By)
+
+
+if __name__ == "__main__":
+    """Begin main program."""
+    main()
