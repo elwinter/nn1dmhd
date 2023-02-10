@@ -131,6 +131,5 @@ dmypy.json
 # Mac stuff
 .DS_Store
 
-# Run result directories
-nn1dmhd.problems.eplasma1/
-nn1dmhd.problems.static/
+# VS Code stuff
+.vscode/
