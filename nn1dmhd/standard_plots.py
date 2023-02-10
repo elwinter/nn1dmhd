@@ -27,7 +27,7 @@ def plot_loss_functions(L_res, L_data, L, ax, title="Loss functions"):
 
     Parameters
     ----------
-    L_res, L_data, L : np.ndarray, shape ( n,)
+    L_res, L_data, L : np.ndarray, shape (n,)
         Loss functions for residual, data, and total.
     ax : matplotlib.Axes
         Axes object to use for the plot.
@@ -55,7 +55,7 @@ def plot_BxBy_quiver(x, y, Bx, By, ax, title="Magnetic field"):
 
     Parameters
     ----------
-    x, y : np.ndarray, shape ( n,)
+    x, y : np.ndarray, shape (n,)
         x and y coordinates for arrows.
     Bx, By : np.ndarray, shape ( n,)
         x- and y-components for arrows.
@@ -76,27 +76,50 @@ def plot_BxBy_quiver(x, y, Bx, By, ax, title="Magnetic field"):
     ax.set_title(title)
 
 
-def plot_logarithmic_heatmap(z, ax, title="Heat map"):
-    """Plot Bx and By components as a quiver plot.
+def plot_logarithmic_heatmap(z, ax, title="Logarithmic heat map"):
+    """Plot a logarithmic heat map.
 
-    Plot Bx and By components as a quiver plot.
+    Plot a logarithmic heat map.
 
     Parameters
     ----------
-    x, y : np.ndarray, shape ( n,)
-        x and y coordinates for arrows.
-    Bx, By : np.ndarray, shape ( n,)
-        x- and y-components for arrows.
+    z : np.ndarray, shape (n,)
+        Values for heatmap.
     ax : matplotlib.Axes
         Axes object to use for the plot.
-    title : str (optional, default "Magnetic field")
+    title : str (optional, default "Logarithmic heat map")
         Title for plot
 
     Returns
     -------
-    # None
+    None
     """
     sns.heatmap(z, ax=ax, norm=mpl.colors.LogNorm(), square=True)
+    ax.set_xlabel("$x$")
+    ax.set_ylabel("$y$")
+    ax.grid()
+    ax.set_title(title)
+
+
+def plot_linear_heatmap(z, ax, title="Linear heat map"):
+    """Plot a linear heat map.
+
+    Plot a linear heat map.
+
+    Parameters
+    ----------
+    z : np.ndarray, shape (n,)
+        Values for heatmap.
+    ax : matplotlib.Axes
+        Axes object to use for the plot.
+    title : str (optional, default "Logarithmic heat map")
+        Title for plot
+
+    Returns
+    -------
+    None
+    """
+    sns.heatmap(z, ax=ax, square=True)
     ax.set_xlabel("$x$")
     ax.set_ylabel("$y$")
     ax.grid()
