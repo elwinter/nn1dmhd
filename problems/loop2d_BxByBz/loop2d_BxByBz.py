@@ -143,14 +143,17 @@ def pde_Bx(X, Y, del_Y):
     # t = tf.reshape(X[:, 0], (nX, 1))
     # x = tf.reshape(X[:, 1], (nX, 1))
     # y = tf.reshape(X[:, 2], (nX, 1))
-    # (Bx, By) = Y
-    (del_Bx, del_By) = del_Y
+    # (Bx, By, Bz) = Y
+    (del_Bx, del_By, del_Bz) = del_Y
     dBx_dt = tf.reshape(del_Bx[:, 0], (nX, 1))
     dBx_dx = tf.reshape(del_Bx[:, 1], (nX, 1))
     dBx_dy = tf.reshape(del_Bx[:, 2], (nX, 1))
     # dBy_dt = tf.reshape(del_By[:, 0], (nX, 1))
     # dBy_dx = tf.reshape(del_By[:, 1], (nX, 1))
     # dBy_dy = tf.reshape(del_By[:, 2], (nX, 1))
+    # dBz_dt = tf.reshape(del_Bz[:, 0], (nX, 1))
+    # dBz_dx = tf.reshape(del_Bz[:, 1], (nX, 1))
+    # dBz_dy = tf.reshape(del_Bz[:, 2], (nX, 1))
 
     # G is a Tensor of shape (n, 1).
     G = dBx_dt + ux*dBx_dx + uy*dBx_dy
@@ -183,14 +186,17 @@ def pde_By(X, Y, del_Y):
     # t = tf.reshape(X[:, 0], (nX, 1))
     # x = tf.reshape(X[:, 1], (nX, 1))
     # y = tf.reshape(X[:, 2], (nX, 1))
-    # (Bx, By) = Y
-    (del_Bx, del_By) = del_Y
+    # (Bx, By, Bz) = Y
+    (del_Bx, del_By, del_Bz) = del_Y
     # dBx_dt = tf.reshape(del_Bx[:, 0], (nX, 1))
     # dBx_dx = tf.reshape(del_Bx[:, 1], (nX, 1))
     # dBx_dy = tf.reshape(del_Bx[:, 2], (nX, 1))
     dBy_dt = tf.reshape(del_By[:, 0], (nX, 1))
     dBy_dx = tf.reshape(del_By[:, 1], (nX, 1))
     dBy_dy = tf.reshape(del_By[:, 2], (nX, 1))
+    # dBz_dt = tf.reshape(del_Bz[:, 0], (nX, 1))
+    # dBz_dx = tf.reshape(del_Bz[:, 1], (nX, 1))
+    # dBz_dy = tf.reshape(del_Bz[:, 2], (nX, 1))
 
     # G is a Tensor of shape (n, 1).
     G = dBy_dt + ux*dBy_dx + uy*dBy_dy
